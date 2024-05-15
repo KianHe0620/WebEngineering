@@ -1,5 +1,5 @@
 <?php
-    $servername = "localhost::3307";
+    $servername = "localhost";
     $username = "root";
     $password = "";
     $dbname = "fK_parking_system";
@@ -10,3 +10,4 @@
     } catch (PDOException $e) {
         echo $e->getMessage();
     }
+?>
