@@ -1,0 +1,116 @@
+body {
+  overflow: scroll;
+  height: 100%;
+}
+
+.top {
+  top: 0;
+  overflow: hidden;
+  background-color: #fbd321;
+  position: fixed;
+  left: 0;
+  width: 100%;
+  z-index: 2;
+  padding-bottom: 10px;
+}
+
+.logo img{
+  margin-left: 20px;
+  height: 80px;
+  width: 200px;
+}
+
+.topnav a {
+  float: left;
+  display: block;
+  color: #000000;
+  text-align: center;
+  padding: 14px 16px;
+  text-decoration: none;
+}
+
+.topnav a:hover {
+  font-weight: bold;
+  color: rgb(9, 5, 234);
+}
+
+.topnav form {
+  margin-left: 20px;
+  float: left;
+  margin-right: 20px;
+}
+
+.topnav input[type=text] {
+  padding: 6px;
+  margin-top: 10px;
+  font-size: 17px;
+  background-color: inherit;
+}
+
+.topnav button {
+  appearance: none;
+  background-color: inherit;
+  border: none;
+  cursor: pointer;
+}
+
+.welcome {
+  float: right;
+  margin-right: 30px;
+}
+
+.sidebar {
+  height: 100%;
+  width: 200px;
+  position: fixed;
+  top: 100px;
+  left: 0;
+  background-color: #198d9c;
+  padding-top: 60px;
+  z-index: 1;
+}
+
+.sidebar table {
+  margin-left: 20px;
+}
+
+.sidebar table th{
+  font-size: 20px;
+  color: #ffffff;
+  float: left;
+}
+.sidebar a {
+  padding: 10px;
+  text-decoration: none;
+  font-size: 16px;
+  color: #ffffff;
+  display: block;
+}
+
+.sidebar a:hover {
+  color: #000000;
+  font-weight: bold;
+  text-decoration: underline;
+}
+
+.logout {
+  font-weight: bold;
+  font-size: 50px;
+  margin-left: 20px;
+}
+.main {
+  margin-top: 90px;
+  margin-left: 200px;
+  padding: 20px;
+  padding-top: 60px; 
+}
+
+.main h1 {
+  font-size: 40px;
+}
+
+@media screen and (max-width: 900px) {
+  .welcome {
+    display: none;
+  }
+}
