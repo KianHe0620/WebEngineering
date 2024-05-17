@@ -5,8 +5,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Website with Side and Top Navigation</title>
     <!-- Bootstrap CSS -->
-    <link rel="stylesheet" href="../bootstrap-5.3.3-dist/css/bootstrap.min.css" >
-    <link rel="stylesheet" href="../css/styles.css"> 
+    <link rel="stylesheet" href="../node_modules/bootstrap-5.3.3-dist/css/bootstrap.min.css" >
+    <link rel="stylesheet" href="../css/styles.css">
+    <script src="../node_modules/jquery/dist/jquery.slim.min.js"></script>
+    <script src="../node_modules/@popperjs/core/dist/umd/popper.min.js"></script>
+    <script src="../node_modules/bootstrap-5.3.3-dist/js/bootstrap.min.js"></script>
+    <script defer src="../js/opensidebar.js"></script>
 </head>
 <body>
 
@@ -34,10 +38,10 @@
                 <th>Parking Booking</th>
             </tr>
             <tr>
-                <td><a href="">Content</a></td>
+                <td><a href="booking.php">Booking</a></td>
             </tr>
             <tr>
-                <td><a href="">Content</a></td>
+                <td><a href="view.php">View Booking</a></td>
             </tr>
             <tr>
                 <th>Traffic Summon</th>
@@ -75,28 +79,9 @@
     </div>
 
     <div class="content">
-    <h1>Student Parking Booking</h1>
-        <div class="filter"><img src="../image/filter.png" alt="filter icon" width="30px" height="30px">Filter</div>
-        <br><br>
-        <table>
-            <tr>
-                <th><label for="bookingDate">Date:</label></th>
-                <th><input type="date" name="bookingDate"></th>
-            </tr>
-            <tr>
-                <th><label for="bookingTime">Time:</label></th>
-                <th><select name="bookingTime" id="bookingTime"></th>
-        </table>
+    <h2>View Booking</h2><br>
+        
     </div>
 
-    <!-- Bootstrap JS and dependencies -->
-    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.3/dist/umd/popper.min.js"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-    <script>
-        document.getElementById('menuBtn').onclick = function() {
-            document.body.classList.toggle('sidebar-open');
-        }
-    </script>
 </body>
 </html>

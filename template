@@ -5,8 +5,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Website with Side and Top Navigation</title>
     <!-- Bootstrap CSS -->
-    <link rel="stylesheet" href="../bootstrap-5.3.3-dist/css/bootstrap.min.css" >
-    <link rel="stylesheet" href="../css/styles.css"> 
+    <link rel="stylesheet" href="../node_modules/bootstrap-5.3.3-dist/css/bootstrap.min.css" >
+    <link rel="stylesheet" href="../css/styles.css">
+    <script src="../node_modules/jquery/dist/jquery.slim.min.js"></script>
+    <script src="../node_modules/@popperjs/core/dist/umd/popper.min.js"></script>
+    <script src="../node_modules/bootstrap-5.3.3-dist/js/bootstrap.min.js"></script>
+    <script defer src="../js/opensidebar.js"></script> 
 </head>
 <body>
 
@@ -34,10 +38,10 @@
                 <th>Parking Booking</th>
             </tr>
             <tr>
-                <td><a href="">Content</a></td>
+                <td><a href="/manageBooking/booking.php">Booking</a></td>
             </tr>
             <tr>
-                <td><a href="">Content</a></td>
+                <td><a href="/manageBooking/view.php">View Booking</a></td>
             </tr>
             <tr>
                 <th>Traffic Summon</th>
@@ -94,15 +98,5 @@
             <p>Content for section 4.</p>
         </div>
     </div>
-
-    <!-- Bootstrap JS and dependencies -->
-    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.3/dist/umd/popper.min.js"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-    <script>
-        document.getElementById('menuBtn').onclick = function() {
-            document.body.classList.toggle('sidebar-open');
-        }
-    </script>
 </body>
 </html>
