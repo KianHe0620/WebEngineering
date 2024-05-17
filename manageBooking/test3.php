@@ -75,24 +75,18 @@
     </div>
 
     <div class="content">
-        <h2>Content Section</h2>
-        <p>This is where your main content goes.</p>
-        <div id="section1">
-            <h3>Section 1</h3>
-            <p>Content for section 1.</p>
-        </div>
-        <div id="section2">
-            <h3>Section 2</h3>
-            <p>Content for section 2.</p>
-        </div>
-        <div id="section3">
-            <h3>Section 3</h3>
-            <p>Content for section 3.</p>
-        </div>
-        <div id="section4">
-            <h3>Section 4</h3>
-            <p>Content for section 4.</p>
-        </div>
+    <h1>Student Parking Booking</h1>
+        <div class="filter"><img src="../image/filter.png" alt="filter icon" width="30px" height="30px">Filter</div>
+        <br><br>
+        <table>
+            <tr>
+                <th><label for="bookingDate">Date:</label></th>
+                <th><input type="date" name="bookingDate"></th>
+            </tr>
+            <tr>
+                <th><label for="bookingTime">Time:</label></th>
+                <th><select name="bookingTime" id="bookingTime"></th>
+        </table>
     </div>
 
     <!-- Bootstrap JS and dependencies -->
