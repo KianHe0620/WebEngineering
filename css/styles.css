@@ -1,5 +1,6 @@
 body {
     display: flex;
+    background-color: rgba(248, 248, 255, 0.941);
 }
 .sidebar {
     height: 100vh;

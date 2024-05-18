@@ -1,13 +1,20 @@
 <?php
-    $servername = "localhost";
-    $username = "root";
-    $password = "";
-    $dbname = "fK_parking_system";
-
-    try {
-        $conn = new PDO("mysql:host=$servername;dbname=$dbname", $username, $password);
-        $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-    } catch (PDOException $e) {
-        echo $e->getMessage();
-    }
+$user = 'root';
+$password = '';
+ 
+// Database name is geeksforgeeks
+$database = 'fk_parking_system';
+ 
+// Server is localhost with
+// port number 3306
+$servername='localhost';
+$mysqli = new mysqli($servername, $user,
+                $password, $database);
+    
+// Checking for connections
+if ($mysqli->connect_error) {
+    die('Connect Error (' .
+    $mysqli->connect_errno . ') '.
+    $mysqli->connect_error);
+}
 ?>
