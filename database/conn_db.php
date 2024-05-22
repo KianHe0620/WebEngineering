@@ -8,8 +8,7 @@ $database = 'fk_parking_system';
 // Server is localhost with
 // port number 3306
 $servername='localhost';
-$mysqli = new mysqli($servername, $user,
-                $password, $database);
+$mysqli = new mysqli($servername, $user, $password, $database);
     
 // Checking for connections
 if ($mysqli->connect_error) {
