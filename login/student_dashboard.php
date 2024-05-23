@@ -37,10 +37,10 @@
                 <th>Parking Booking</th>
             </tr>
             <tr>
-                <td><a href="/manageBooking/booking.php">Booking</a></td>
+                <td><a href="../manageBooking/booking.php">Booking</a></td>
             </tr>
             <tr>
-                <td><a href="/manageBooking/view.php">View Booking</a></td>
+                <td><a href="../manageBooking/view.php">View Booking</a></td>
             </tr>
             <tr>
                 <th>Traffic Summon</th>

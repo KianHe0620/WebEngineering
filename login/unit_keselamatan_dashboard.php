@@ -60,12 +60,12 @@
     <div class="topnav">
         <div id="menuBtn">&#9776;</div>
         <div class="logo">
-            <img src="../image/umpsa_logo.png" alt="Logo" width="150" height="50">
+            <img src="image/umpsa_logo.png" alt="Logo" width="150" height="50">
         </div>
         <div class="search-bar">
             <form action="" method="">
                 <input type="text" placeholder="Search.." name="search">
-                <button type="submit"><img src="../image/search.png" height="20px" width="20px"></button>
+                <button type="submit"><img src="image/search.png" height="20px" width="20px"></button>
             </form>
         </div>
         <a href="#home">Home</a>
