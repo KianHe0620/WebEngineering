@@ -1,5 +1,17 @@
 <?php
-    require "../database/conn_db.php";
+
+     
+    // Server is localhost with
+    // port number 3306
+    $mysqli = new mysqli('localhost','root', '', 'fk_parking_system');
+        
+    // Checking for connections
+    if ($mysqli->connect_error) {
+        die('Connect Error (' .
+        $mysqli->connect_errno . ') '.
+        $mysqli->connect_error);
+    }
+
 
     $sql = " SELECT * FROM parking ORDER BY Parking_number ";
     $result = $mysqli->query($sql);
