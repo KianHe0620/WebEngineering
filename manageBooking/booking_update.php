@@ -14,7 +14,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     if ($mysqli->query($sql) === TRUE) {
         $response = array('success' => true, 'message' => 'Booking confirmed!');
     } else {
-        error_log('MySQL Error: ' . $mysqli->error); // Log error to server logs
         $response = array('success' => false, 'message' => 'Error: ' . $mysqli->error);
     }
 
