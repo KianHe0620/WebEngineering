@@ -1,46 +1,39 @@
 <?php
-    date_default_timezone_set('Asia/Kuala_Lumpur');
+date_default_timezone_set('Asia/Kuala_Lumpur');
 
-    require "../database/conn_db.php";
+require "../database/conn_db.php";
 
-    $filterDate = isset($_GET['date']) ? $_GET['date'] : date('Y-m-d');
-    $filterTime = isset($_GET['time']) ? $_GET['time'] : date('g a');
+$filterDate = isset($_GET['date']) ? $_GET['date'] : date('Y-m-d');
+$filterTime = isset($_GET['time']) ? $_GET['time'] : date('g a');
 
-    $sql = "SELECT parking.Parking_number AS parking_number, parking.Parking_area, booking.* 
-            FROM parking 
-            LEFT JOIN booking ON parking.Parking_number = booking.Parking_number 
-            AND booking.Booking_date = '$filterDate' 
-            AND STR_TO_DATE(booking.Start_time, '%l%p') <= STR_TO_DATE('$filterTime', '%l%p') 
-            AND STR_TO_DATE(booking.End_time, '%l%p') >= STR_TO_DATE('$filterTime', '%l%p') 
-            WHERE booking.Booking_id IS NULL 
-            OR (booking.Booking_id IS NOT NULL 
-            AND (STR_TO_DATE(booking.Start_time, '%l%p') > DATE_ADD(STR_TO_DATE('$filterTime', '%l%p'), INTERVAL 1 HOUR) 
-            OR STR_TO_DATE(booking.End_time, '%l%p') < STR_TO_DATE('$filterTime', '%l%p'))) 
-            ORDER BY parking.Parking_number";
+$sql = "SELECT parking.Parking_number AS parking_number, parking.Parking_area, booking.* 
+        FROM parking 
+        LEFT JOIN booking ON parking.Parking_number = booking.Parking_number 
+        AND booking.Booking_date = :filterDate 
+        AND STR_TO_DATE(booking.Start_time, '%l%p') <= STR_TO_DATE(:filterTime, '%l%p') 
+        AND STR_TO_DATE(booking.End_time, '%l%p') >= STR_TO_DATE(:filterTime, '%l%p') 
+        WHERE booking.Booking_id IS NULL 
+        OR (booking.Booking_id IS NOT NULL 
+        AND (STR_TO_DATE(booking.Start_time, '%l%p') > DATE_ADD(STR_TO_DATE(:filterTime, '%l%p'), INTERVAL 1 HOUR) 
+        OR STR_TO_DATE(booking.End_time, '%l%p') < STR_TO_DATE(:filterTime, '%l%p'))) 
+        ORDER BY parking.Parking_number";
 
-    // Execute the query and handle errors
-    $result = $mysqli->query($sql);
-    if ($result === false) {
-        echo "Error: " . $mysqli->error;
-        exit;
-    }
+$stmt = $conn->prepare($sql);
+$stmt->execute(['filterDate' => $filterDate, 'filterTime' => $filterTime]);
 
-    $currentTime = date('g a');
-    $endTimeLimit = date('g a', strtotime('+2 hours', strtotime($currentTime)));
-    $updateSql = "UPDATE parking, booking 
-                  SET parking.parking_status = 'booked' 
-                  WHERE STR_TO_DATE(booking.Start_time, '%l%p') <= STR_TO_DATE('$currentTime', '%l%p') 
-                  AND STR_TO_DATE(booking.End_time, '%l%p') >= STR_TO_DATE('$endTimeLimit', '%l%p') 
-                  AND parking.Parking_number = booking.Parking_number";
+$currentTime = date('g a');
+$endTimeLimit = date('g a', strtotime('+2 hours', strtotime($currentTime)));
+$updateSql = "UPDATE parking 
+              JOIN booking ON parking.Parking_number = booking.Parking_number 
+              SET parking.parking_status = 'booked' 
+              WHERE STR_TO_DATE(booking.Start_time, '%l%p') <= STR_TO_DATE(:currentTime, '%l%p') 
+              AND STR_TO_DATE(booking.End_time, '%l%p') >= STR_TO_DATE(:endTimeLimit, '%l%p')";
 
-    if ($mysqli->query($updateSql) === false) {
-        echo "Error: " . $mysqli->error;
-        exit;
-    }
+$updateStmt = $conn->prepare($updateSql);
+$updateStmt->execute(['currentTime' => $currentTime, 'endTimeLimit' => $endTimeLimit]);
 
-    $mysqli->close();
+// No need to close the connection explicitly as it will be closed automatically when the script ends
 ?>
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -127,39 +120,20 @@
             <br>
             <div class="filter">
                 <form action="" method="GET">
-                <label for="date">Date:</label>
-                <input type="date" id="date" name="date" value="<?php echo $filterDate; ?>" min="<?php echo date('Y-m-d'); ?>">
+                    <label for="date">Date:</label>
+                    <input type="date" id="date" name="date" value="<?php echo $filterDate; ?>" min="<?php echo date('Y-m-d'); ?>">
                     <label for="time">Time:</label>
                     <select id="time" name="time" required>
                     <?php
-                        // Get today's date
-                        $today = date('Y-m-d');
-
-                        // Check if the selected date is after today's date
-                        $isFutureDate = ($filterDate > $today);
-
-                        // Define an array of times
                         $times = [
                             '12am', '1am', '2am', '3am', '4am', '5am', '6am', '7am', '8am', '9am', '10am', '11am',
                             '12pm', '1pm', '2pm', '3pm', '4pm', '5pm', '6pm', '7pm', '8pm', '9pm', '10pm', '11pm'
                         ];
 
-                        // If it's a future date, show all times
-                        if ($isFutureDate) {
-                            $filteredTimes = $times;
-                        } else {
-                            // Get the current hour and whether it's am or pm
-                            $currentHour = date('g');
-                            $isPM = date('a') === 'pm';
+                        $isFutureDate = ($filterDate > date('Y-m-d'));
 
-                            // Find the index of the current hour in the times array
-                            $startIndex = array_search($currentHour . ($isPM ? 'pm' : 'am'), $times);
+                        $filteredTimes = $isFutureDate ? $times : array_slice($times, array_search(date('g a'), $times) + 1);
 
-                            // Slice the times array to include only hours after the current hour
-                            $filteredTimes = array_slice($times, $startIndex);
-                        }
-
-                        // Output the filtered times as options for the dropdown
                         foreach ($filteredTimes as $time) {
                             $selected = ($time == $filterTime) ? 'selected' : '';
                             echo "<option value=\"$time\" $selected>$time</option>";
@@ -182,14 +156,13 @@
                 </thead> 
                 <tbody id="tableDetails"> 
                 <?php 
-                while ($rows = $result->fetch_assoc()) {
-                    $buttonText = 'Book';
+                while ($rows = $stmt->fetch(PDO::FETCH_ASSOC)) {
                 ?>
                 <tr>
                     <td><?php echo $rows['parking_number']; ?></td>
                     <td><?php echo $rows['Parking_area']; ?></td>
                     <td>
-                        <button class="btn btn-primary book-btn" data-parking-number="<?php echo $rows['parking_number']; ?>" data-date="<?php echo $filterDate; ?>"><?php echo $buttonText; ?></button>
+                        <button class="btn btn-primary book-btn" data-parking-number="<?php echo $rows['parking_number']; ?>" data-date="<?php echo $filterDate; ?>">Book</button>
                     </td>
                 </tr>
                 <?php
@@ -200,7 +173,6 @@
         </div> 
     </div>
 
-    <!-- Modal -->
     <div class="modal fade" id="bookingModal" tabindex="-1" aria-labelledby="bookingModalLabel" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
@@ -251,32 +223,23 @@ document.addEventListener('DOMContentLoaded', function () {
     var bookingForm = document.getElementById('bookingForm');
     var startTimeSelect = document.getElementById('startTime');
     var endTimeSelect = document.getElementById('endTime');
-    var currentTime = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', hour12: true }).toLowerCase();
-    var filteredDate = document.getElementById('date').value;
 
-    // Disable past times for start time
-    Array.from(startTimeSelect.options).forEach(option => {
-        if (Date.parse('01/01/2021 ' + option.value) < Date.parse('01/01/2021 ' + currentTime)) {
-            option.disabled = true;
-        }
+    document.querySelectorAll('.book-btn').forEach(function (button) {
+        button.addEventListener('click', function () {
+            var parkingNumber = this.getAttribute('data-parking-number');
+            var bookingDate = this.getAttribute('data-date');
+            document.getElementById('parkingNumber').value = parkingNumber;
+            document.getElementById('bookingDate').value = bookingDate;
+            bookingModal.show();
+        });
     });
 
-    // Update end time options based on selected start time
     startTimeSelect.addEventListener('change', function () {
         var selectedStartTime = this.value;
         Array.from(endTimeSelect.options).forEach(option => {
             option.disabled = Date.parse('01/01/2021 ' + option.value) <= Date.parse('01/01/2021 ' + selectedStartTime);
         });
         endTimeSelect.selectedIndex = Array.from(endTimeSelect.options).findIndex(option => !option.disabled);
-    });
-
-    document.querySelectorAll('.book-btn').forEach(function (button) {
-        button.addEventListener('click', function () {
-            var parkingNumber = this.getAttribute('data-parking-number');
-            document.getElementById('parkingNumber').value = parkingNumber;
-            document.getElementById('bookingDate').value = filteredDate;
-            bookingModal.show();
-        });
     });
 
     bookingForm.addEventListener('submit', function (event) {
@@ -289,21 +252,15 @@ document.addEventListener('DOMContentLoaded', function () {
         })
         .then(response => response.json())
         .then(data => {
+            alert(data.message);
             if (data.success) {
-                alert(data.message);
                 bookingModal.hide();
-                location.reload(); // Optionally refresh the page
-            } else {
-                alert(data.message);
+                location.reload();
             }
         })
         .catch(error => console.error('Error:', error));
     });
 });
-
-        </script>
-
-
+    </script>
 </body>
 </html>
-

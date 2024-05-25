@@ -1,16 +1,14 @@
 <?php
 date_default_timezone_set('Asia/Kuala_Lumpur');
 
-    require "../database/conn_db.php";
+require "../database/conn_db.php";
 
-    $sql = "SELECT * FROM booking";
-    $result = $mysqli->query($sql);
+$sql = "SELECT * FROM booking";
+$stmt = $conn->query($sql);
 
-    if ($result === false) {
-        die("Error: " . $mysqli->error);
-    }
-
-    $mysqli->close();
+if ($stmt === false) {
+    die("Error: " . $conn->errorInfo()[2]);
+}
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -103,7 +101,7 @@ date_default_timezone_set('Asia/Kuala_Lumpur');
                 </thead> 
                 <tbody id="tableDetails"> 
                 <?php 
-                while($rows = $result->fetch_assoc()) {
+                while($rows = $stmt->fetch(PDO::FETCH_ASSOC)) {
                 ?>
                 <tr>
                     <td><?php echo $rows['Parking_number']; ?></td>
