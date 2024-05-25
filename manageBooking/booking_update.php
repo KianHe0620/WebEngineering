@@ -1,23 +1,32 @@
 <?php
-date_default_timezone_set('Asia/Kuala_Lumpur');
 require "../database/conn_db.php";
 
-if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-    $parkingNumber = $_POST['parkingNumber'];
-    $startTime = $_POST['startTime'];
-    $endTime = $_POST['endTime'];
-    $bookingDate = date('Y-m-d'); // Adjust this based on your needs
+$parkingNumber = $_POST['parkingNumber'];
+$startTime = $_POST['startTime'];
+$endTime = $_POST['endTime'];
+$bookingDate = $_POST['bookingDate'];
+$currentDate = date('Y-m-d');
+$currentTime = date('g a');
 
-    $sql = "INSERT INTO booking (Parking_number, Booking_date, Start_time, End_time, bookingStatus) 
-            VALUES ('$parkingNumber', '$bookingDate', '$startTime', '$endTime', 'confirmed')";
-
-    if ($mysqli->query($sql) === TRUE) {
-        $response = array('success' => true, 'message' => 'Booking confirmed!');
-    } else {
-        $response = array('success' => false, 'message' => 'Error: ' . $mysqli->error);
-    }
-
-    echo json_encode($response);
-    $mysqli->close();
+// Validate start time and end time
+if (strtotime($bookingDate . ' ' . $startTime) < strtotime($currentDate . ' ' . $currentTime)) {
+    echo json_encode(['success' => false, 'message' => 'Start time cannot be in the past.']);
+    exit;
 }
+
+if (strtotime($bookingDate . ' ' . $endTime) <= strtotime($bookingDate . ' ' . $startTime)) {
+    echo json_encode(['success' => false, 'message' => 'End time must be greater than start time.']);
+    exit;
+}
+
+$sql = "INSERT INTO booking (Parking_number, Booking_date, Start_time, End_time) 
+        VALUES ('$parkingNumber', '$bookingDate', '$startTime', '$endTime')";
+
+if ($mysqli->query($sql)) {
+    echo json_encode(['success' => true, 'message' => 'Parking spot booked successfully!']);
+} else {
+    echo json_encode(['success' => false, 'message' => 'Error: ' . $mysqli->error]);
+}
+
+$mysqli->close();
 ?>

@@ -29,8 +29,7 @@
     $endTimeLimit = date('g a', strtotime('+2 hours', strtotime($currentTime)));
     $updateSql = "UPDATE parking, booking 
                   SET parking.parking_status = 'booked' 
-                  WHERE booking.bookingStatus = 'confirmed' 
-                  AND STR_TO_DATE(booking.Start_time, '%l%p') <= STR_TO_DATE('$currentTime', '%l%p') 
+                  WHERE STR_TO_DATE(booking.Start_time, '%l%p') <= STR_TO_DATE('$currentTime', '%l%p') 
                   AND STR_TO_DATE(booking.End_time, '%l%p') >= STR_TO_DATE('$endTimeLimit', '%l%p') 
                   AND parking.Parking_number = booking.Parking_number";
 
@@ -247,16 +246,35 @@
     </div>
 
     <script>
-    document.addEventListener('DOMContentLoaded', function () {
+document.addEventListener('DOMContentLoaded', function () {
     var bookingModal = new bootstrap.Modal(document.getElementById('bookingModal'));
     var bookingForm = document.getElementById('bookingForm');
+    var startTimeSelect = document.getElementById('startTime');
+    var endTimeSelect = document.getElementById('endTime');
+    var currentTime = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', hour12: true }).toLowerCase();
+    var filteredDate = document.getElementById('date').value;
+
+    // Disable past times for start time
+    Array.from(startTimeSelect.options).forEach(option => {
+        if (Date.parse('01/01/2021 ' + option.value) < Date.parse('01/01/2021 ' + currentTime)) {
+            option.disabled = true;
+        }
+    });
+
+    // Update end time options based on selected start time
+    startTimeSelect.addEventListener('change', function () {
+        var selectedStartTime = this.value;
+        Array.from(endTimeSelect.options).forEach(option => {
+            option.disabled = Date.parse('01/01/2021 ' + option.value) <= Date.parse('01/01/2021 ' + selectedStartTime);
+        });
+        endTimeSelect.selectedIndex = Array.from(endTimeSelect.options).findIndex(option => !option.disabled);
+    });
 
     document.querySelectorAll('.book-btn').forEach(function (button) {
         button.addEventListener('click', function () {
             var parkingNumber = this.getAttribute('data-parking-number');
-            var date = this.getAttribute('data-date');
             document.getElementById('parkingNumber').value = parkingNumber;
-            document.getElementById('bookingDate').value = date;
+            document.getElementById('bookingDate').value = filteredDate;
             bookingModal.show();
         });
     });
@@ -265,22 +283,16 @@
         event.preventDefault();
         var formData = new FormData(bookingForm);
         
-        console.log("Submitting form with data:", Object.fromEntries(formData.entries()));
-
         fetch('booking_update.php', {
             method: 'POST',
             body: formData
         })
-        .then(response => {
-            console.log("Response status:", response.status);
-            return response.json();
-        })
+        .then(response => response.json())
         .then(data => {
-            console.log("Response data:", data);
             if (data.success) {
                 alert(data.message);
                 bookingModal.hide();
-                location.reload();
+                location.reload(); // Optionally refresh the page
             } else {
                 alert(data.message);
             }
@@ -289,7 +301,8 @@
     });
 });
 
-    </script>
+        </script>
+
 
 </body>
 </html>
