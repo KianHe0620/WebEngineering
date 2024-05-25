@@ -1,4 +1,12 @@
 <?php
+session_start();
+
+// Check if user is not logged in, redirect to login page
+// if (!isset($_SESSION['student_id'])) {
+//     header("Location: ../login/login.php");
+//     exit();
+// }
+
 date_default_timezone_set('Asia/Kuala_Lumpur');
 
 require "../database/conn_db.php";
@@ -32,7 +40,6 @@ $updateSql = "UPDATE parking
 $updateStmt = $conn->prepare($updateSql);
 $updateStmt->execute(['currentTime' => $currentTime, 'endTimeLimit' => $endTimeLimit]);
 
-// No need to close the connection explicitly as it will be closed automatically when the script ends
 ?>
 <!DOCTYPE html>
 <html lang="en">
