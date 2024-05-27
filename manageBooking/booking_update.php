@@ -43,9 +43,11 @@ try {
 
     // Check if the selected time slot is already booked
     $sql = "SELECT * FROM booking 
-            WHERE Parking_number = :parkingNumber 
-            AND Booking_date = :bookingDate 
-            AND (:startTime BETWEEN Start_time AND End_time OR :endTime BETWEEN Start_time AND End_time)";
+    WHERE Parking_number = :parkingNumber 
+    AND Booking_date = :bookingDate 
+    AND (:startTime BETWEEN Start_time AND End_time OR 
+         (:endTime <= End_time AND :endTime > Start_time))";
+
     $stmt = $conn->prepare($sql);
     $stmt->bindParam(':parkingNumber', $parkingNumber);
     $stmt->bindParam(':bookingDate', $bookingDate);

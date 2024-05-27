@@ -31,6 +31,9 @@ $booking_date = $booking['Booking_date'];
 $start_time = $booking['Start_time'];
 $end_time = $booking['End_time'];
 
+$start_time = date("h:i A", strtotime($booking['Start_time']));
+$end_time = date("h:i A", strtotime($booking['End_time']));
+
 ?>
 <!DOCTYPE html>
 <html lang="en">

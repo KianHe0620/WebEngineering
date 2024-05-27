@@ -26,9 +26,11 @@ function submitBookingForm() {
 
     var formattedStartTime = formatStartTime(stime); // Format start time to HH:00:00
     var formattedEndTime = formatEndTime(etime); // Format end time based on the specified condition
+
+    console.log('end time:'+formattedEndTime)
     
     // Check for time clash
-    checkTimeClash(parkingNumber, bookingDate, formattedStartTime, formattedEndTime);
+    // checkTimeClash(parkingNumber, bookingDate, formattedStartTime, formattedEndTime);
 }
 
 function formatStartTime(time) {
@@ -41,15 +43,7 @@ function formatStartTime(time) {
 function formatEndTime(time) {
     var parts = time.split(':');
     var hours = parseInt(parts[0]);
-    var minutes = parseInt(parts[1]);
-
-    // Increment hour by 1 if minutes aren't 00
-    if (minutes !== 0) {
-        hours += 1;
-        minutes = 0; // Reset minutes to 00
-    }
-
-    var formattedEndTime = (hours < 10 ? '0' : '') + hours + ':00:00';
+    var formattedEndTime = (hours < 10 ? '0' : '') + hours + ':59:59';
     return formattedEndTime;
 }
 
