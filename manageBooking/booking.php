@@ -177,7 +177,7 @@ $stmt->execute(['filterDate' => $filterDate, 'filterTime' => $filterTime]);
                             <input type="time" class="form-control" id="startTime" name="startTime" required>
                         </div>
                         <div class="mb-3">
-                            <label for="endTime" class="form-label">End Time (Time will auto formatted like eg)<br>eg: 8:34am => 9:00am</label>
+                            <label for="endTime" class="form-label">End Time (Time will auto formatted like eg)<br>eg: 8:34am => 8:59am</label>
                             <input type="time" class="form-control" id="endTime" name="endTime" required>
                         </div>
                         <button id="confirmBookingBtn" type="button" class="btn btn-primary">Confirm Booking</button>
