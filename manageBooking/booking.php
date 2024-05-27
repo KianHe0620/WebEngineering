@@ -3,7 +3,7 @@ session_start();
 
 //Check if user is not logged in, redirect to login page
 // if (!isset($_SESSION['student_id'])) {
-//     header("Location: ./logintest2.php");
+//     header("Location: ../login/login.php");
 //     exit();
 // }
 
@@ -12,33 +12,23 @@ date_default_timezone_set('Asia/Kuala_Lumpur');
 require "../database/conn_db.php";
 
 $filterDate = isset($_GET['date']) ? $_GET['date'] : date('Y-m-d');
-$filterTime = isset($_GET['time']) ? $_GET['time'] : date('H:i');
+$filterTime = isset($_GET['time']) ? $_GET['time'] : date('H:i:s');
 
 $sql = "SELECT parking.Parking_number AS parking_number, parking.Parking_area, booking.* 
         FROM parking 
-        LEFT JOIN booking ON parking.Parking_number = booking.Parking_number 
+        LEFT JOIN booking 
+        ON parking.Parking_number = booking.Parking_number 
         AND booking.Booking_date = :filterDate 
-        AND STR_TO_DATE(booking.Start_time, '%l%p') <= STR_TO_DATE(:filterTime, '%l%p') 
-        AND STR_TO_DATE(booking.End_time, '%l%p') >= STR_TO_DATE(:filterTime, '%l%p') 
+        AND booking.Start_time <= :filterTime 
+        AND booking.End_time >= :filterTime 
         WHERE booking.Booking_id IS NULL 
         OR (booking.Booking_id IS NOT NULL 
-        AND (STR_TO_DATE(booking.Start_time, '%l%p') > DATE_ADD(STR_TO_DATE(:filterTime, '%l%p'), INTERVAL 1 HOUR) 
-        OR STR_TO_DATE(booking.End_time, '%l%p') < STR_TO_DATE(:filterTime, '%l%p'))) 
+        AND (booking.Start_time > :filterTime 
+        OR booking.End_time < :filterTime)) 
         ORDER BY parking.Parking_number";
 
 $stmt = $conn->prepare($sql);
 $stmt->execute(['filterDate' => $filterDate, 'filterTime' => $filterTime]);
-
-$currentTime = date('H:i:s');
-$endTimeLimit = date('H:i:s', strtotime('+2 hours', strtotime($currentTime)));
-$updateSql = "UPDATE parking 
-              JOIN booking ON parking.Parking_number = booking.Parking_number 
-              SET parking.Parking_status = 'booked' 
-              WHERE STR_TO_DATE(booking.Start_time, '%l%p') <= STR_TO_DATE(:currentTime, '%l%p') 
-              AND STR_TO_DATE(booking.End_time, '%l%p') >= STR_TO_DATE(:endTimeLimit, '%l%p')";
-
-$updateStmt = $conn->prepare($updateSql);
-$updateStmt->execute(['currentTime' => $currentTime, 'endTimeLimit' => $endTimeLimit]);
 
 ?>
 <!DOCTYPE html>
@@ -131,10 +121,7 @@ $updateStmt->execute(['currentTime' => $currentTime, 'endTimeLimit' => $endTimeL
                 <label for="date">Date:</label>
                 <input type="date" id="date" name="date" value="<?php echo $filterDate; ?>" min="<?php echo date('Y-m-d'); ?>">
                 <label for="time">Time:</label>
-                <?php
-                    $currentTime = date('H:i');
-                ?>
-                <input type="time" id="time" name="time" value="<?php echo $currentTime; ?>" required>
+                <input type="time" id="time" name="time" value="<?php echo $filterTime; ?>" required>
                 <button type="submit">Filter</button>
             </form>
             </div> 
@@ -172,7 +159,7 @@ $updateStmt->execute(['currentTime' => $currentTime, 'endTimeLimit' => $endTimeL
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="bookingModalLabel">Book Parking Spot</h5>
+                    <h5 class="modal-title" id="bookingModalLabel">Book Parking</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
@@ -186,11 +173,11 @@ $updateStmt->execute(['currentTime' => $currentTime, 'endTimeLimit' => $endTimeL
                             <input type="text" class="form-control" id="bookingDate" name="bookingDate" readonly>
                         </div>
                         <div class="mb-3">
-                            <label for="startTime" class="form-label">Start Time</label>
+                            <label for="startTime" class="form-label">Start Time (Time will auto formatted like eg)<br>eg: 7:34am => 7:00am</label>
                             <input type="time" class="form-control" id="startTime" name="startTime" required>
                         </div>
                         <div class="mb-3">
-                            <label for="endTime" class="form-label">End Time</label>
+                            <label for="endTime" class="form-label">End Time (Time will auto formatted like eg)<br>eg: 8:34am => 9:00am</label>
                             <input type="time" class="form-control" id="endTime" name="endTime" required>
                         </div>
                         <button id="confirmBookingBtn" type="button" class="btn btn-primary">Confirm Booking</button>

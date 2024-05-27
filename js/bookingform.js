@@ -21,23 +21,34 @@ $(document).ready(function() {
 function submitBookingForm() {
     var parkingNumber = $('#parkingNumber').val();
     var bookingDate = $('#bookingDate').val();
-    var time = $('#startTime').val(); // Get the time from the start time input field
-    
-    var formattedStartTime = formatStartTime(time); // Format start time to HH:00:00
-    var formattedEndTime = formatEndTime(time); // Format end time to (HH+1):00:00
+    var stime = $('#startTime').val(); // Get the time from the start time input field
+    var etime = $('#endTime').val(); // Get the time from the end time input field
+
+    var formattedStartTime = formatStartTime(stime); // Format start time to HH:00:00
+    var formattedEndTime = formatEndTime(etime); // Format end time based on the specified condition
     
     // Check for time clash
     checkTimeClash(parkingNumber, bookingDate, formattedStartTime, formattedEndTime);
 }
 
 function formatStartTime(time) {
-    var hours = parseInt(time.split(':')[0]);
+    var parts = time.split(':');
+    var hours = parseInt(parts[0]);
     var formattedStartTime = (hours < 10 ? '0' : '') + hours + ':00:00';
     return formattedStartTime;
 }
 
 function formatEndTime(time) {
-    var hours = parseInt(time.split(':')[0]) + 1; // Increment hour by 1
+    var parts = time.split(':');
+    var hours = parseInt(parts[0]);
+    var minutes = parseInt(parts[1]);
+
+    // Increment hour by 1 if minutes aren't 00
+    if (minutes !== 0) {
+        hours += 1;
+        minutes = 0; // Reset minutes to 00
+    }
+
     var formattedEndTime = (hours < 10 ? '0' : '') + hours + ':00:00';
     return formattedEndTime;
 }
@@ -57,8 +68,8 @@ function checkTimeClash(parkingNumber, bookingDate, startTime, endTime) {
             if (response.success) {
                 // Booking successful, display success message or redirect
                 alert(response.message);
-                // Hide the modal
                 $('#bookingModal').modal('hide'); 
+                location.reload(true);
             } else {
                 // Booking failed due to time clash, display error message
                 alert(response.message);
