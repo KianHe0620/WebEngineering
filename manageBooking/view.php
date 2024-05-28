@@ -115,13 +115,18 @@ if ($stmt === false) {
                 </thead> 
                 <tbody id="tableDetails"> 
                 <?php 
+                if (!isset($stmt)) {
+                        echo 'No record found.';
+                    }
                 while($rows = $stmt->fetch(PDO::FETCH_ASSOC)) {
+                    $startTime = date("h:i A", strtotime($rows['Start_time']));
+                    $endTime = date("h:i A", strtotime($rows['End_time']));
                 ?>
                 <tr>
                     <td><?php echo $rows['Parking_number']; ?></td>
                     <td><?php echo $rows['Booking_date']; ?></td>
-                    <td><?php echo $rows['Start_time']; ?></td>
-                    <td><?php echo $rows['End_time']; ?></td>
+                    <td><?php echo $startTime; ?></td>
+                    <td><?php echo $endTime; ?></td>
                     <td>
                     <a href="reference.php?booking_id=<?php echo $rows['Booking_id']; ?>" class="btn btn-primary">View & Update</a>
                         <form class="cancel-booking-form">
