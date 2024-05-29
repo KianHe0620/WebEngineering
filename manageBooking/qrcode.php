@@ -1,23 +1,12 @@
 <?php
+session_start();
 
-     
-    // Server is localhost with
-    // port number 3306
-    $mysqli = new mysqli('localhost','root', '', 'fk_parking_system');
-        
-    // Checking for connections
-    if ($mysqli->connect_error) {
-        die('Connect Error (' .
-        $mysqli->connect_errno . ') '.
-        $mysqli->connect_error);
-    }
-
-
-    $sql = " SELECT * FROM parking ORDER BY Parking_number ";
-    $result = $mysqli->query($sql);
-    $mysqli->close();
+//Check if user is not logged in, redirect to login page
+// if (!isset($_SESSION['student_id'])) {
+//     header("Location: ../login/login.php");
+//     exit();
+// }
 ?>
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -26,11 +15,10 @@
     <title>Website with Side and Top Navigation</title>
     <link rel="stylesheet" href="../node_modules/bootstrap-5.3.3-dist/css/bootstrap.min.css" >
     <link rel="stylesheet" href="../css/styles.css">
-    <script src="../node_modules/jquery/dist/jquery.slim.min.js"></script>
+    <script src="../node_modules/jquery/dist/jquery.min.js"></script>
     <script src="../node_modules/@popperjs/core/dist/umd/popper.min.js"></script>
     <script src="../node_modules/bootstrap-5.3.3-dist/js/bootstrap.min.js"></script>
-    <script defer src="../js/opensidebar.js"></script>
-    <script defer src="../js/filter.js"></script> 
+    <script defer src="../js/opensidebar.js"></script> 
 </head>
 <body>
 
@@ -96,41 +84,20 @@
     </div>
 
     <div class="content">
-        <div class="container mt-3"> 
-            <h2>Student Parking Booking</h2>
-            <br>
-            <div class="filter"><img src="../image/filter.png" alt="filter icon" width="30px" height="30px"><b>  Filter</b></div> 
-            <br>
-            <input type="text" 
-                class="form-control" 
-                placeholder="Search Here"
-                id="txtInputTable"> 
-            <br> 
-            <table class="table table-bordered"> 
-                <thead> 
-                    <tr> 
-                        <th>Parking Number</th> 
-                        <th>Parking Area</th> 
-                        <th>Status</th> 
-                    </tr> 
-                </thead> 
-                <tbody id="tableDetails"> 
-                <?php 
-                // LOOP TILL END OF DATA
-                while($rows=$result->fetch_assoc())
-                {
-            ?>
-            <tr>
-                <td><?php echo $rows['Parking_number'];?></td>
-                <td><?php echo $rows['Parking_area'];?></td>
-                <td><button class="btn btn-primary" onclick="">Book</button></td>
-            </tr>
-            <?php
-                }
-            ?>
-                </tbody> 
-            </table> 
-        </div> 
+        <div>
+            <img src="../image/winking_cat2.gif" height="50px" width="50px"> 
+            Scan the QR code to navigate to Booking Reference. 
+            <img src="../image/winking_cat.gif" height="50px" width="50px">
+        </div>
+        <div class="row justify-content-left">
+            <div class="col-auto border mb-5" id="qrcode"></div>
+        </div>
     </div>
+    <script src="qrcode.min.js"></script>
+    <script>
+        var qrcode = new QRCode("qrcode");
+        var booking_id = <?php echo $_GET['booking_id'];?>;
+        qrcode.makeCode("http://localhost/WebEngineering/ManageBooking/reference.php?booking_id=" + booking_id);
+    </script>
 </body>
 </html>
