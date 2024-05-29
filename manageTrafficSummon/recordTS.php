@@ -3,11 +3,12 @@
     
     if(isset($_POST['save']))
     {
+        $TSummon_id=$_POST['TSummon_id'];
         $Violation_type=$_POST['Violation_type'];
         $Enforcement_type=$_POST['Enforcement_type'];
         $Demerit_point=$_POST['Demerit_point'];
 
-        $sql = "INSERT INTO `trafficsummon`(`Violation_type`, `Enforcement_type`, `Demerit_point`) VALUES ('$Violation_type','$Enforcement_type','$Demerit_point')";
+        $sql   ="INSERT INTO `trafficsummon`(`TSummon_id`, `Violation_type`, `Enforcement_type`, `Demerit_point`) VALUES ('$TSummon_id','$Violation_type','$Enforcement_type','$Demerit_point')";
         $result = mysqli_query($conn, $sql);
         if($result){ 
             header('location:manageTrafficSummon.php');
@@ -75,6 +76,9 @@
                 <td><a href="updateTS.php">Update Traffic Summon</a></td>
             </tr>
             <tr>
+                <td><a href="deleteTS.php">Delete Traffic Summon</a></td>
+            </tr>
+            <tr>
                 <td><a href="recordTS.php">Record Traffic Summon</a></td>
             </tr>
             <tr>
@@ -108,7 +112,7 @@
 
     <div class="content">
         <h2>Record Traffic Summon</h2>
-        
+        </p>
         <!-- Search Box -->
         <form class="d-flex mb-3">
             <input class="form-control me-2" type="search" placeholder="Search Summon ID" aria-label="Search">

@@ -78,6 +78,9 @@
                 <td><a href="updateTS.php">Update Traffic Summon</a></td>
             </tr>
             <tr>
+                <td><a href="deleteTS.php">Delete Traffic Summon</a></td>
+            </tr>
+            <tr>
                 <td><a href="recordTS.php">Record Traffic Summon</a></td>
             </tr>
             <tr>

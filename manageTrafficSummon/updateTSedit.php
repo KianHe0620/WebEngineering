@@ -3,12 +3,13 @@
     
     if(isset($_POST['save']))
     {
+        $TSummon_id=$_POST['TSummon_id'];
         $Violation_type=$_POST['Violation_type'];
         $Enforcement_type=$_POST['Enforcement_type'];
         $Demerit_point=$_POST['Demerit_point'];
 
     
-        $sql   ="INSERT INTO `trafficsummon`(`Violation_type`, `Enforcement_type`, `Demerit_point`) VALUES ('$Violation_type','$Enforcement_type','$Demerit_point')";
+        $sql   ="INSERT INTO `trafficsummon`(`TSummon_id`, `Violation_type`, `Enforcement_type`, `Demerit_point`) VALUES ('$TSummon_id','$Violation_type','$Enforcement_type','$Demerit_point')";
         $result=mysqli_query($conn,$sql);
         if($result){ 
         header('location:manageTrafficSummon.php');
@@ -78,6 +79,9 @@
                 <td><a href="updateTSedit.php">Update Traffic Summon</a></td>
             </tr>
             <tr>
+                <td><a href="deleteTS.php">Delete Traffic Summon</a></td>
+            </tr>
+            <tr>
                 <td><a href="recordTS.php">Record Traffic Summon</a></td>
             </tr>
             <tr>
@@ -111,8 +115,12 @@
 
     <div class="content">
         <h2>Update Traffic Summon</h2>
-        <p>Fill in the information below:</p>
+        </p>
         <form action="/action_page.php">
+            <div class="mb-3">
+                <label for="SummonID" class="form-label">Summon ID: </label>
+                <input type="text" class="form-control" id="SummonID">
+            </div>
             <div class="mb-3">
                 <label for="TypeViolation" class="form-label">Type of Violation: </label>
                 <select class="form-control" id="TypeViolation" name="TypeViolation">
