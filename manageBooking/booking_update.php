@@ -79,7 +79,7 @@ try {
     $stmt->bindParam(':endTime', $endTime);
 
     if ($stmt->execute()) {
-        echo json_encode(['success' => true, 'message' => 'Parking spot booked successfully!']);
+        echo json_encode(['success' => true, 'booking_id' => $newBookingId, 'message' => 'Parking spot booked successfully!']);
     } else {
         echo json_encode(['success' => false, 'message' => 'Error: Unable to book parking spot.']);
     }
