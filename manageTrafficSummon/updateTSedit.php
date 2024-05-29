@@ -140,16 +140,5 @@
             <button type="submit" value="Update" name="update"class="btn btn-primary">Update</button>
         </form>
     </div>
-    <script>
-        function confirmUpdate() {
-            var violation = document.getElementById('TypeViolation').value;
-            var enforcement = document.getElementById('TypeEnforcement').value;
-            var points = document.getElementById('DemeritPoints').value;
-            
-            return confirm("Please confirm the details:\n\nType of Violation: " + violation + 
-                            "\nType of Enforcement: " + enforcement + 
-                            "\nDemerit Points: " + points);
-        }
-    </script>
 </body>
 </html>
