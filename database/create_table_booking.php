@@ -7,11 +7,8 @@
             End_time TIME,
             Booking_date DATE,
             Parking_number VARCHAR(10) NOT NULL,
-            Vehicle_platenum VARCHAR(10) NOT NULL,
             Student_id VARCHAR(10) NOT NULL,
-            BookingStatus VARCHAR(20) NOT NULL CHECK (BookingStatus IN ('confirmed', 'cancelled', 'pending', 'completed')),
             FOREIGN KEY(Parking_number) REFERENCES Parking(Parking_number),
-            FOREIGN KEY(Vehicle_platenum) REFERENCES Vehicle(Vehicle_platenum),
             FOREIGN KEY(Student_id) REFERENCES Student(Student_id)
         )";
         $conn->exec($sql);

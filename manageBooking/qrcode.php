@@ -1,3 +1,12 @@
+<?php
+session_start();
+
+//Check if user is not logged in, redirect to login page
+// if (!isset($_SESSION['student_id'])) {
+//     header("Location: ../login/login.php");
+//     exit();
+// }
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -37,10 +46,10 @@
                 <th>Parking Booking</th>
             </tr>
             <tr>
-                <td><a href="/manageBooking/booking.php">Booking</a></td>
+                <td><a href="booking.php">Booking</a></td>
             </tr>
             <tr>
-                <td><a href="/manageBooking/view.php">View Booking</a></td>
+                <td><a href="view.php">View Booking</a></td>
             </tr>
             <tr>
                 <th>Traffic Summon</th>
@@ -75,24 +84,20 @@
     </div>
 
     <div class="content">
-        <h2>Content Section</h2>
-        <p>This is where your main content goes.</p>
-        <div id="section1">
-            <h3>Section 1</h3>
-            <p>Content for section 1.</p>
+        <div>
+            <img src="../image/winking_cat2.gif" height="50px" width="50px"> 
+            Scan the QR code to navigate to Booking Reference. 
+            <img src="../image/winking_cat.gif" height="50px" width="50px">
         </div>
-        <div id="section2">
-            <h3>Section 2</h3>
-            <p>Content for section 2.</p>
-        </div>
-        <div id="section3">
-            <h3>Section 3</h3>
-            <p>Content for section 3.</p>
-        </div>
-        <div id="section4">
-            <h3>Section 4</h3>
-            <p>Content for section 4.</p>
+        <div class="row justify-content-left">
+            <div class="col-auto border mb-5" id="qrcode"></div>
         </div>
     </div>
+    <script src="qrcode.min.js"></script>
+    <script>
+        var qrcode = new QRCode("qrcode");
+        var booking_id = <?php echo $_GET['booking_id'];?>;
+        qrcode.makeCode("http://localhost/WebEngineering/ManageBooking/reference.php?booking_id=" + booking_id);
+    </script>
 </body>
 </html>
