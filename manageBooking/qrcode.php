@@ -84,7 +84,12 @@ session_start();
     </div>
 
     <div class="content">
-        <div class="row justify-content-center">
+        <div>
+            <img src="../image/winking_cat2.gif" height="50px" width="50px"> 
+            Scan the QR code to navigate to Booking Reference. 
+            <img src="../image/winking_cat.gif" height="50px" width="50px">
+        </div>
+        <div class="row justify-content-left">
             <div class="col-auto border mb-5" id="qrcode"></div>
         </div>
     </div>
