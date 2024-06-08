@@ -103,6 +103,7 @@ $end_time_12 = date("h:i A", strtotime($booking['End_time'])); // 12-hour format
                 <p><strong>Start Time:</strong> <?php echo $start_time_12; ?></p>
                 <p><strong>End Time:</strong> <?php echo $end_time_12; ?></p>
                 <button id="editButton" class="btn btn-primary">Edit</button>
+                <a href="http://localhost/WebEngineering/ManageBooking/view.php" class="btn btn-primary">Back</a>
             </div>
         </div>
     </div>

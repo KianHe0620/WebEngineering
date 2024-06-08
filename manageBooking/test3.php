@@ -1,7 +1,7 @@
 <?php
 session_start();
 
-// Check if user is not logged in, redirect to login page
+//Check if user is not logged in, redirect to login page
 // if (!isset($_SESSION['student_id'])) {
 //     header("Location: ../login/login.php");
 //     exit();
@@ -12,29 +12,24 @@ date_default_timezone_set('Asia/Kuala_Lumpur');
 require "../database/conn_db.php";
 
 $filterDate = isset($_GET['date']) ? $_GET['date'] : date('Y-m-d');
+$filterTime = isset($_GET['time']) ? $_GET['time'] : date('H:i:s');
 
-$sql = "SELECT parking.Parking_number AS parking_number, parking.Parking_area, booking.Booking_id, booking.Start_time, booking.End_time
-        FROM parking
+$sql = "SELECT parking.Parking_number AS parking_number, parking.Parking_area, booking.* 
+        FROM parking 
         LEFT JOIN booking 
         ON parking.Parking_number = booking.Parking_number 
-        AND booking.Booking_date = :filterDate
+        AND booking.Booking_date = :filterDate 
+        AND booking.Start_time <= :filterTime 
+        AND booking.End_time >= :filterTime 
+        WHERE booking.Booking_id IS NULL 
+        OR (booking.Booking_id IS NOT NULL 
+        AND (booking.Start_time > :filterTime 
+        OR booking.End_time < :filterTime)) 
         ORDER BY parking.Parking_number";
 
 $stmt = $conn->prepare($sql);
-$stmt->execute(['filterDate' => $filterDate]);
+$stmt->execute(['filterDate' => $filterDate, 'filterTime' => $filterTime]);
 
-$bookingsByParking = [];
-$parkingAreas = [];
-while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
-    if ($row['Booking_id']) {
-        $bookingsByParking[$row['parking_number']][] = $row;
-    } else {
-        if (!isset($bookingsByParking[$row['parking_number']])) {
-            $bookingsByParking[$row['parking_number']] = [];
-        }
-    }
-    $parkingAreas[$row['parking_number']] = $row['Parking_area'];
-}
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -48,25 +43,8 @@ while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
     <script src="../node_modules/@popperjs/core/dist/umd/popper.min.js"></script>
     <script src="../node_modules/bootstrap-5.3.3-dist/js/bootstrap.min.js"></script>
     <script defer src="../js/opensidebar.js"></script>
-    <script defer src="../js/filter.js"></script>
+    <script defer src="../js/filter.js"></script> 
     <script defer src="../js/bookingform.js"></script>
-    <style>
-        .availability-table {
-            width: 100%;
-            border-collapse: collapse;
-        }
-        .availability-table th, .availability-table td {
-            padding: 10px;
-            text-align: center;
-            border: 1px solid #000;
-        }
-        .availability-table .booked {
-            background-color: #ff9999;
-        }
-        .availability-table .available {
-            background-color: #99ff99;
-        }
-    </style>
 </head>
 <body>
     <div class="sidebar">
@@ -139,65 +117,34 @@ while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
             </div>
             <br>
             <div class="filter">
-                <form method="GET">
-                    <label for="date">Date:</label>
-                    <input type="date" id="date" name="date" value="<?php echo $filterDate; ?>" min="<?php echo date('Y-m-d'); ?>">
-                    <button type="submit" class="btn btn-primary" style="margin-left: 3%;">Filter</button>
-                </form>
+            <form method="GET">
+                <label for="date">Date:</label>
+                <input type="date" id="date" name="date" value="<?php echo $filterDate; ?>" min="<?php echo date('Y-m-d'); ?>">
+                <label for="time">Time:</label>
+                <input type="time" id="time" name="time" value="<?php echo $filterTime; ?>" required>
+                <button type="submit">Filter</button>
+            </form>
             </div> 
             <br>
-            <table class="table table-bordered text-center align-items-center"> 
+            <input type="text" class="form-control" placeholder="Search Here" id="txtInputTable"> 
+            <br> 
+            <table class="table table-bordered"> 
                 <thead> 
                     <tr> 
                         <th>Parking Number</th> 
                         <th>Parking Area</th> 
-                        <th>Availability</th>
                         <th>Action</th>
                     </tr> 
                 </thead> 
                 <tbody id="tableDetails"> 
                 <?php 
-                foreach ($bookingsByParking as $parkingNumber => $bookings) {
+                while ($rows = $stmt->fetch(PDO::FETCH_ASSOC)) {
                 ?>
                 <tr>
-                    <td><?php echo $parkingNumber; ?></td>
-                    <td><?php echo $parkingAreas[$parkingNumber]; ?></td>
+                    <td><?php echo $rows['parking_number']; ?></td>
+                    <td><?php echo $rows['Parking_area']; ?></td>
                     <td>
-                        <table class="availability-table" data-ignore-search>
-                            <tr>
-                                <th>8 AM</th>
-                                <th>9 AM</th>
-                                <th>10 AM</th>
-                                <th>11 AM</th>
-                                <th>12 PM</th>
-                                <th>1 PM</th>
-                                <th>2 PM</th>
-                                <th>3 PM</th>
-                                <th>4 PM</th>
-                                <th>5 PM</th>
-                                <th>6 PM</th>
-                            </tr>
-                            <tr>
-                            <?php
-                            $timeSlots = ['08:00:00', '09:00:00', '10:00:00', '11:00:00', '12:00:00', '13:00:00', '14:00:00', '15:00:00', '16:00:00', '17:00:00', '18:00:00'];
-                            foreach ($timeSlots as $time) {
-                                $isBooked = false;
-                                foreach ($bookings as $booking) {
-                                    if ($booking['Start_time'] <= $time && $booking['End_time'] > $time) {
-                                        $isBooked = true;
-                                        break;
-                                        
-                                    }
-                                }
-                                $class = $isBooked ? 'booked' : 'available';
-                                echo "<td class='$class'>" . ($class == 'booked' ? 'Booked' : 'Available') . "</td>";
-                            }
-                            ?>
-                            </tr>
-                        </table>
-                    </td>
-                    <td>
-                        <button class="btn btn-primary book-btn" data-parking-number="<?php echo $parkingNumber; ?>" data-date="<?php echo $filterDate; ?>">Book</button>
+                        <button class="btn btn-primary book-btn" data-parking-number="<?php echo $rows['parking_number']; ?>" data-date="<?php echo $filterDate; ?>">Book</button>
                     </td>
                 </tr>
                 <?php
