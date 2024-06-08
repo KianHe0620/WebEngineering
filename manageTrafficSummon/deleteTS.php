@@ -1,22 +1,16 @@
 <?php
-    include_once('../database/conn_db.php');
-    
-    if(isset($_POST['save']))
-    {
-        $TSummon_id=$_POST['TSummon_id'];
-        $Violation_type=$_POST['Violation_type'];
-        $Enforcement_type=$_POST['Enforcement_type'];
-        $Demerit_point=$_POST['Demerit_point'];
+include_once('../database/conn_db.php');
 
-        $sql   ="INSERT INTO `trafficsummon`(`TSummon_id`, `Violation_type`, `Enforcement_type`, `Demerit_point`) VALUES ('$TSummon_id','$Violation_type','$Enforcement_type','$Demerit_point')";
-        $result = mysqli_query($conn, $sql);
-        if($result){ 
-            header('location:manageTrafficSummon.php');
-            echo "<script>alert('You have received a traffic summons');</script>";   
-        } else {
-            die(mysqli_error($conn));
-        }
+if (isset($_POST['delete'])) {
+    $delete_id = $_POST['delete_id'];
+    $sql = "DELETE FROM trafficsummon WHERE TSummon_id = '$delete_id'";
+    $result = mysqli_query($conn, $sql);
+    if ($result) {
+        echo "<script>alert('Traffic Summon deleted successfully');</script>";
+    } else {
+        echo "<script>alert('Error deleting Traffic Summon');</script>";
     }
+}
 ?>
 
 <!DOCTYPE html>
@@ -35,7 +29,7 @@
 <body>
 
     <div class="sidebar">
-        <table>
+    <table>
             <tr>
                 <th>User Profile</th>
             </tr>
@@ -112,7 +106,7 @@
 
     <div class="content">
         <h2>Record Traffic Summon</h2>
-        </p>
+        
         <!-- Search Box -->
         <form class="d-flex mb-3">
             <input class="form-control me-2" type="search" placeholder="Search Summon ID" aria-label="Search">
@@ -128,30 +122,43 @@
                     <th scope="col">Type of Violation</th>
                     <th scope="col">Type of Enforcement</th>
                     <th scope="col">Demerit Point</th>
+                    <th scope="col">Action</th>
                 </tr>
             </thead>
             <tbody>
-                <tr>
-                    <td>TS001</td>
-                    <td>2024-05-30</td>
-                    <td>Parking violation</td>
-                    <td>Warning given</td>
-                    <td>10</td>
-                </tr>
-                <tr>
-                    <td>TS002</td>
-                    <td>2024-06-10</td>
-                    <td>Not comply in campus traffic regulation</td>
-                    <td>Warning given</td>
-                    <td>15</td>
-                </tr>
-                <tr>
-                    <td>TS003</td>
-                    <td>2024-06-01</td>
-                    <td>Accident caused</td>
-                    <td>Revoke in campus vehicle permission for 1 semester</td>
-                    <td>25</td>
-                </tr>
+                <?php
+                if (isset($_POST['search_summon_id'])) {
+                    $search_summon_id = $_POST['search_summon_id'];
+                    $sql = "SELECT * FROM trafficsummon WHERE TSummon_id = '$search_summon_id'";
+                    $result = mysqli_query($conn, $sql);
+
+                    if (mysqli_num_rows($result) > 0) {
+                        while ($row = mysqli_fetch_assoc($result)) {
+                            echo "<tr>
+                                <td>{$row['TSummon_id']}</td>
+                                <td>{$row['date']}</td>
+                                <td>{$row['Violation_type']}</td>
+                                <td>{$row['Enforcement_type']}</td>
+                                <td>{$row['Demerit_point']}</td>
+                                <td>
+                                    <form method='POST' action=''>
+                                        <input type='hidden' name='delete_id' value='{$row['TSummon_id']}'>
+                                        <button type='submit' name='delete' class='btn btn-danger'>Delete</button>
+                                    </form>
+                                </td>
+                            </tr>";
+                        }
+                    } else {
+                        echo "<tr>
+                            <td colspan='6'>No results found for Summon ID: $search_summon_id</td>
+                        </tr>";
+                    }
+                } else {
+                    echo "<tr>
+                        <td colspan='6'>Enter a Summon ID to search and delete</td>
+                    </tr>";
+                }
+                ?>
             </tbody>
         </table>
     </div>

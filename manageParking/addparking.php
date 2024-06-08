@@ -1,7 +1,7 @@
 <?php
     include_once('../database/conn_db.php');
     
-    if(isset($_POST['save']))
+    if(isset($_POST['submit']))
     {
         $Parking_area=$_POST['Parking_area'];
         $Parking_number=$_POST['Parking_number'];
