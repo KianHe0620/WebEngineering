@@ -1,6 +1,16 @@
 <?php
-include_once('../database/conn_db.php');
+$servername = "localhost";
+$username = "root";
+$password = "";
+$dbname = "fk_parking_system";
 
+// Create connection
+$conn = new mysqli($servername, $username, $password, $dbname);
+
+// Check connection
+if ($conn->connect_error) {
+    die("Connection failed: " . $conn->connect_error);
+}
 
 if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['createparking'])) {
     $Parking_area = $_POST['Parking_area'];
@@ -12,6 +22,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['createparking'])) {
     // Check if a parking spot already exists at the same location and time
     $sql_check = "SELECT * FROM Parking WHERE Parking_area = ? AND parkingdate = ?";
     $stmt_check = $conn->prepare($sql_check);
+    if ($stmt_check === false) {
+        die("Prepare failed: " . $conn->error);
+    }
     $stmt_check->bind_param("ss", $Parking_area, $parkingdate);
     $stmt_check->execute();
     $result_check = $stmt_check->get_result();
@@ -29,11 +42,14 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['createparking'])) {
             VALUES (?, ?, ?, ?, ?, ?)";
             
     $stmt = $conn->prepare($sql);
+    if ($stmt === false) {
+        die("Prepare failed: " . $conn->error);
+    }
     $stmt->bind_param("ssssss", $Parking_number, $Parking_area, $Parking_status, $vehicletype, $parkingdate, $qrImage);
     
     if ($stmt->execute()) {
         // Redirect to viewparking.php after successful insertion
-        header("Location: viewparking.php");
+        header("Location: listparking.php");
         exit();
     } else {
         echo "Error: " . $sql . "<br>" . $conn->error;
@@ -68,7 +84,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['createparking'])) {
     <div class="content">
         <h2>Create New Parking Area</h2>
         <p>Fill in the information below:</p>
-        <form action="newparking.php" method="POST"> <!-- Corrected form method -->
+        <form action="addparking.php" method="POST"> <!-- Corrected form method -->
             <div class="mb-3">
                 <label for="Parking_area" class="form-label">Parking Area: </label>
                 <select class="form-select" id="Parking_area" name="Parking_area">
