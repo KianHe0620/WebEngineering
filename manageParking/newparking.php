@@ -33,7 +33,7 @@
         <div id="section1">
         <?php
         // Check if the form was submitted
-        if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['addparking'])){
+        if ($_SERVER['REQUEST_METHOD'] === 'POST'){
             // Safely access the 'Parking_area' key
             $Parking_area = isset($_POST['Parking_area']) ? $_POST['Parking_area'] : 'Not specified';
 
@@ -48,7 +48,9 @@
             echo "No data submitted.";
         }
         ?>
-            
+            <img src="../image/winking_cat2.gif" height="50px" width="50px"> 
+            Scan the QR code to navigate to Parking Info. 
+            <img src="../image/winking_cat.gif" height="50px" width="50px">
         </div>
         <div class="row justify-content-left">
             <div class="col-auto border mb-5" id="qrcode"></div>
