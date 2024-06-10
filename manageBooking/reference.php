@@ -65,7 +65,7 @@ $end_time_12 = date("h:i A", strtotime($booking['End_time'])); // 12-hour format
     <div class="topnav">
         <div id="menuBtn">&#9776;</div>
         <div class="logo">
-            <img src="../image/umpsa_logo.png" alt="Logo" width="150" height="50">
+            <a href="../login/student_dashboard.php"><img src="../image/umpsa_logo.png" alt="Logo" width="150" height="50"></a>
         </div>
         <div class="search-bar">
             <form action="" method="">

@@ -85,7 +85,7 @@ if ($stmt === false) {
     <div class="topnav">
         <div id="menuBtn">&#9776;</div>
         <div class="logo">
-            <img src="../image/umpsa_logo.png" alt="Logo" width="150" height="50">
+            <a href="../login/student_dashboard.php"><img src="../image/umpsa_logo.png" alt="Logo" width="150" height="50"></a>
         </div>
         <div class="search-bar">
             <form action="" method="">
@@ -131,7 +131,7 @@ if ($stmt === false) {
                     <a href="reference.php?booking_id=<?php echo $rows['Booking_id']; ?>" class="btn btn-primary">View & Update</a>
                         <form class="cancel-booking-form">
                             <input type="hidden" name="booking_id" value="<?php echo $rows['Booking_id']; ?>">
-                            <button type="button" class="btn btn-danger cancel-booking-btn" onclick="cancelBooking(this)">Cancel Booking</button>
+                            <button type="button" class="btn btn-danger cancel-booking-btn" onclick="cancelBooking(this)" style="margin-top: 3%;">Cancel Booking</button>
                         </form>
                     </td>
                 </tr>

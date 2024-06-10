@@ -81,7 +81,7 @@ if ($stmt === false) {
     <div class="topnav">
         <div id="menuBtn">&#9776;</div>
         <div class="logo">
-            <img src="../image/umpsa_logo.png" alt="Logo" width="150" height="50">
+            <a href="../login/admin_dashboard.php"><img src="../image/umpsa_logo.png" alt="Logo" width="150" height="50"></a>
         </div>
         <div class="search-bar">
             <form action="" method="">
