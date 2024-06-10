@@ -4,7 +4,10 @@
         $sql = "CREATE TABLE Parking(
             Parking_number VARCHAR(10) NOT NULL PRIMARY KEY,
             Parking_area VARCHAR(10),
-            Parking_status VARCHAR(9)
+            Parking_status VARCHAR(9),
+            Vehicletype VARCHAR(10),
+            parkingdate  date,
+            qrImage blob
             )";
         $conn->exec($sql);
     } catch (PDOException $e) {
