@@ -1,9 +1,6 @@
 <?php
     require "../database/conn_db.php";
 
-    $sql = "SELECT * FROM parking ORDER BY Parking_number  ";
-    $result = $mysqli->query($sql);
-    $mysqli->close();
 ?>
 
 <!DOCTYPE html>
@@ -18,6 +15,12 @@
     <script src="../node_modules/@popperjs/core/dist/umd/popper.min.js"></script>
     <script src="../node_modules/bootstrap-5.3.3-dist/js/bootstrap.min.js"></script>
     <script defer src="../js/opensidebar.js"></script> 
+    <style>
+        input[type="text"], input[type="date"], input[type="time"]{
+        width: 30%;
+        border-radius: 4px;
+      }
+    </style>
 </head>
 <body>
 
@@ -90,25 +93,34 @@
         <p>Choose area and fill in the correct information:</p>
         <form>
             <div class="col-auto">
-                <label for="area" class="form-label">Choose the Area: </label>
-                <input type="text" class="form-control" id="area">
+            <label for="Parking_area" class="form-label">Parking Area: </label>
+                <select class="form-select" id="Parking_area" name="Parking_area">
+                    <option value="choose">choose...</option>
+                    <option value="A1">A1</option>
+                    <option value="A2">A2</option>
+                    <option value="A3">A3</option>
+                    <option value="B1">B1</option>
+                    <option value="B2">B2</option>
+                </select>
             </div>
             <div class="mb-7">
                 <label for="date_from" class="form-label">Date from: </label>
-                <input type="text" class="form-control" id="date_from">
+                <input type="date" class="form-control" id="date_from">
             </div>
             <div class="mb-7">
             <label for="date_until" class="form-label">Date until: </label>
-                <input type="text" class="form-control" id="date_until">
+                <input type="date" class="form-control" id="date_until">
             </div>
             <div class="mb-7">
-                <label for="start_time" class="form-label">Start time: </label>
-                <input type="text" class="form-control" id="start_time">
-            </div>
-            <div class="mb-7">
-            <label for="end_time" class="form-label">End time: </label>
-                <input type="text" class="form-control" id="end_time">
-            </div>
+    <label for="start_time" class="form-label">Start time:</label>
+    <input type="time" class="form-control" id="start_time" step="1800">
+    <!-- step="1800" means intervals of 30 minutes (30 * 60 = 1800 seconds) -->
+</div>
+<div class="mb-7">
+    <label for="end_time" class="form-label">End time:</label>
+    <input type="time" class="form-control" id="end_time" step="1800">
+</div>
+
             <div class="mb-7">
                 <label for="ereason" class="form-label">Event/Reason: </label>
                 <input type="text" class="form-control" id="ereason"><br>
