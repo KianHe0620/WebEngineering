@@ -46,13 +46,14 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['createparking'])) {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Website with Side and Top Navigation</title>
+    <title>Create New Parking - FKPark</title>
     <link rel="stylesheet" href="../node_modules/bootstrap-5.3.3-dist/css/bootstrap.min.css" >
     <link rel="stylesheet" href="../css/styles.css">
     <script src="../node_modules/jquery/dist/jquery.slim.min.js"></script>
     <script src="../node_modules/@popperjs/core/dist/umd/popper.min.js"></script>
     <script src="../node_modules/bootstrap-5.3.3-dist/js/bootstrap.min.js"></script>
     <script defer src="../js/opensidebar.js"></script> 
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcode-generator/1.4.4/qrcode.min.js"></script>
 </head>
 <body>
 
@@ -100,7 +101,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['createparking'])) {
             </div>
             <div class="qr-code" id="qrCodeContainer"></div>
             <div class="mb-3">
-                <button type="button" id="viewQRBtn" style="display: none;">View QR Code</button>
+                <button type="button" id="viewQRBtn" class="btn btn-primary" style="display: none;">View QR Code</button>
             </div>
             <div class="mb-3">
                 <button type="submit" value="Save" name="createparking" class="btn btn-primary">Create Parking</button>
