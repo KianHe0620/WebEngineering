@@ -7,19 +7,19 @@ if (isset($_GET['delete'])) {
 
     $sql_delete = "DELETE FROM Parking WHERE Parking_number = ?";
     $stmt_delete = $conn->prepare($sql_delete);
-    $stmt_delete->bind_param("s", $Parking_number);
-
+    $stmt_delete->bindParam(1, $Parking_number);
     if ($stmt_delete->execute()) {
         header("Location: listparking.php");
         exit();
     } else {
-        echo "Error deleting record: " . $conn->error;
+        echo "Error deleting record: " . $stmt_delete->errorInfo();
     }
 }
 
 // Fetch all parking areas
 $sql = "SELECT * FROM Parking";
-$result = $conn->query($sql);
+$stmt = $conn->query($sql);
+$parking_areas = $stmt->fetchAll(PDO::FETCH_ASSOC);
 ?>
 
 <!DOCTYPE html>
@@ -27,7 +27,7 @@ $result = $conn->query($sql);
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Create New Parking - FKPark</title>
+    <title>List of Parking Areas - FKPark</title>
     <link rel="stylesheet" href="../node_modules/bootstrap-5.3.3-dist/css/bootstrap.min.css" >
     <link rel="stylesheet" href="../css/styles.css">
     <script src="../node_modules/jquery/dist/jquery.slim.min.js"></script>
@@ -47,7 +47,7 @@ $result = $conn->query($sql);
     </div>
 
     <div class="content">
-    <h2>List of Created Parking Areas</h2>
+        <h2>List of Parking Areas</h2>
         <table class="table table-striped">
             <thead>
                 <tr>
@@ -61,8 +61,8 @@ $result = $conn->query($sql);
                 </tr>
             </thead>
             <tbody>
-                <?php if ($stmt_check->rowCount > 0): ?>
-                    <?php while ($row = $result->fetch_assoc(PDO::FETCH_ASSOC)): ?>
+                <?php if (count($parking_areas) > 0): ?>
+                    <?php foreach ($parking_areas as $row): ?>
                         <tr>
                             <td><?php echo htmlspecialchars($row['Parking_number']); ?></td>
                             <td><?php echo htmlspecialchars($row['Parking_area']); ?></td>
@@ -79,7 +79,7 @@ $result = $conn->query($sql);
                                 <a href="listparking.php?delete=<?php echo $row['Parking_number']; ?>" class="btn btn-danger btn-sm" onclick="return confirm('Are you sure you want to delete this parking area?');">Delete</a>
                             </td>
                         </tr>
-                    <?php endwhile; ?>
+                    <?php endforeach; ?>
                 <?php else: ?>
                     <tr>
                         <td colspan="7">No parking areas found.</td>
@@ -87,6 +87,6 @@ $result = $conn->query($sql);
                 <?php endif; ?>
             </tbody>
         </table>
-
+    </div>
 </body>
 </html>
