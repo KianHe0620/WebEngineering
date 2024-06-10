@@ -6,7 +6,7 @@
             Parking_area VARCHAR(10),
             Parking_status VARCHAR(9),
             Vehicletype VARCHAR(10),
-            parkingdate  date,
+            parkingdate  DATETIME,
             qrImage blob
             )";
         $conn->exec($sql);
