@@ -1,15 +1,9 @@
 <?php
-$servername = "localhost";
-$username = "root";
-$password = "";
-$dbname = "fk_parking_system";
+session_start();
 
-// Create connection
-$conn = new mysqli($servername, $username, $password, $dbname);
-
-// Check connection
-if ($conn->connect_error) {
-    die("Connection failed: " . $conn->connect_error);
+// Initialize parking areas array in session if not already set
+if (!isset($_SESSION['parking_areas'])) {
+    $_SESSION['parking_areas'] = [];
 }
 
 if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['createparking'])) {
@@ -19,41 +13,28 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['createparking'])) {
     $parkingdate = $_POST['parkingdate'];
     $qrImage = $_POST['qrImage'];
 
-    // Check if a parking spot already exists at the same location and time
-    $sql_check = "SELECT * FROM Parking WHERE Parking_area = ? AND parkingdate = ?";
-    $stmt_check = $conn->prepare($sql_check);
-    if ($stmt_check === false) {
-        die("Prepare failed: " . $conn->error);
-    }
-    $stmt_check->bind_param("ss", $Parking_area, $parkingdate);
-    $stmt_check->execute();
-    $result_check = $stmt_check->get_result();
-
-    if ($result_check->num_rows > 0) {
-        // If a record exists, set Parking_status to 'unavailable'
-        $Parking_status = "unavailable";
-    } else {
-        // If no record exists, set Parking_status to 'available'
-        $Parking_status = "available";
+    // Determine parking status
+    $Parking_status = "available";
+    foreach ($_SESSION['parking_areas'] as $parking_area) {
+        if ($parking_area['Parking_area'] == $Parking_area && $parking_area['parkingdate'] == $parkingdate) {
+            $Parking_status = "unavailable";
+            break;
+        }
     }
 
-    // Insert data into database
-    $sql = "INSERT INTO Parking (Parking_number, Parking_area, Parking_status, Vehicletype, parkingdate, qrImage) 
-            VALUES (?, ?, ?, ?, ?, ?)";
-            
-    $stmt = $conn->prepare($sql);
-    if ($stmt === false) {
-        die("Prepare failed: " . $conn->error);
-    }
-    $stmt->bind_param("ssssss", $Parking_number, $Parking_area, $Parking_status, $vehicletype, $parkingdate, $qrImage);
-    
-    if ($stmt->execute()) {
-        // Redirect to viewparking.php after successful insertion
-        header("Location: listparking.php");
-        exit();
-    } else {
-        echo "Error: " . $sql . "<br>" . $conn->error;
-    }
+    // Add new parking area to session
+    $_SESSION['parking_areas'][] = [
+        'Parking_number' => $Parking_number,
+        'Parking_area' => $Parking_area,
+        'Parking_status' => $Parking_status,
+        'Vehicletype' => $vehicletype,
+        'parkingdate' => $parkingdate,
+        'qrImage' => $qrImage
+    ];
+
+    // Redirect to listparking.php after successful insertion
+    header("Location: listparking.php");
+    exit();
 }
 ?>
 
@@ -91,10 +72,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['createparking'])) {
                 <td><a href="addparking.php">Add Parking</a></td>
             </tr>
             <tr>
-                <td><a href="viewparking.php">View Parking</a></td>
+                <td><a href="managearea.php">Manage Area</a></td>
             </tr>
             <tr>
-                <td><a href="managearea.php">Manage Area</a></td>
+                <td><a href="admindashboard.php">Dashboard</a></td>
             </tr>
             <tr>
                 <th>Parking Booking</th>
@@ -140,7 +121,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['createparking'])) {
     <div class="content">
         <h2>Create New Parking Area</h2>
         <p>Fill in the information below:</p>
-        <form action="listparking.php" method="POST"> <!-- Corrected form method -->
+        <form action="addparking.php" method="POST">
             <div class="mb-3">
                 <label for="Parking_area" class="form-label">Parking Area: </label>
                 <select class="form-select" id="Parking_area" name="Parking_area">
@@ -151,8 +132,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['createparking'])) {
                     <option value="B1">B1</option>
                     <option value="B2">B2</option>
                 </select>
-                </div>
-                <div class="mb-3">
+            </div>
+            <div class="mb-3">
                 <label for="Parking_number" class="form-label">Parking Number: </label>
                 <input type="text" class="form-control" id="Parking_number" name="Parking_number">
             </div>
