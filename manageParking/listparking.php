@@ -1,25 +1,41 @@
 <?php
-require_once('../database/conn_db.php');
+// Hardcoded parking areas data
+$parking_areas = [
+    [
+        'Parking_number' => 'A1-12',
+        'Parking_area' => 'A1',
+        'Parking_status' => 'available',
+        'Vehicletype' => 'Car',
+        'parkingdate' => '2024-06-11',
+        'qrImage' => null, // Replace with actual base64-encoded image if needed
+    ],
+    [
+        'Parking_number' => 'B2-122',
+        'Parking_area' => 'B2',
+        'Parking_status' => 'unavailable',
+        'Vehicletype' => 'Car',
+        'parkingdate' => '2024-06-11',
+        'qrImage' => null, // Replace with actual base64-encoded image if needed
+    ],
+    // Add more hardcoded parking data as needed
+];
 
-// Delete functionality
+// Handle delete action
 if (isset($_GET['delete'])) {
     $Parking_number = $_GET['delete'];
 
-    $sql_delete = "DELETE FROM Parking WHERE Parking_number = ?";
-    $stmt_delete = $conn->prepare($sql_delete);
-    $stmt_delete->bindParam(1, $Parking_number);
-    if ($stmt_delete->execute()) {
-        header("Location: listparking.php");
-        exit();
-    } else {
-        echo "Error deleting record: " . $stmt_delete->errorInfo();
+    // Find the index of the item to delete
+    foreach ($parking_areas as $key => $parking_area) {
+        if ($parking_area['Parking_number'] == $Parking_number) {
+            unset($parking_areas[$key]);
+            break;
+        }
     }
-}
 
-// Fetch all parking areas
-$sql = "SELECT * FROM Parking";
-$stmt = $conn->query($sql);
-$parking_areas = $stmt->fetchAll(PDO::FETCH_ASSOC);
+    // Redirect to avoid resubmission on refresh
+    header("Location: listparking.php");
+    exit();
+}
 ?>
 
 <!DOCTYPE html>
@@ -38,12 +54,68 @@ $parking_areas = $stmt->fetchAll(PDO::FETCH_ASSOC);
 </head>
 <body>
 
-    <div class="sidebar">
-        <!-- Sidebar content -->
+<div class="sidebar">
+        <table>
+            <tr>
+                <th>User Profile</th>
+            </tr>
+            <tr>
+                <td><a href="">Content</a></td>
+            </tr>
+            <tr>
+                <td><a href="">Content</a></td>
+            </tr>
+            <tr>
+                <th>Parking Area</th>
+            </tr>
+            <tr>
+                <td><a href="addparking.php">Add Parking</a></td>
+            </tr>
+            <tr>
+                <td><a href="managearea.php">Manage Area</a></td>
+            </tr>
+            <tr>
+                <td><a href="admindashboard.php">Dashboard</a></td>
+            </tr>
+            <tr>
+                <th>Parking Booking</th>
+            </tr>
+            <tr>
+                <td><a href="/manageBooking/booking.php">Booking</a></td>
+            </tr>
+            <tr>
+                <td><a href="/manageBooking/view.php">View Booking</a></td>
+            </tr>
+            <tr>
+                <th>Traffic Summon</th>
+            </tr>
+            <tr>
+                <td><a href="">Content</a></td>
+            </tr>
+            <tr>
+                <td><a href="">Content</a></td>
+            </tr>
+            <tr>
+                <th><a href="">Log Out</a></th>
+            </tr>
+        </table>
     </div>
 
     <div class="topnav">
-        <!-- Top navigation content -->
+        <div id="menuBtn">&#9776;</div>
+        <div class="logo">
+            <img src="../image/umpsa_logo.png" alt="Logo" width="150" height="50">
+        </div>
+        <div class="search-bar">
+            <form action="" method="">
+                <input type="text" placeholder="Search.." name="search">
+                <button type="submit"><img src="../image/search.png" height="20px" width="20px"></button>
+            </form>
+        </div>
+        <a href="#home">Home</a>
+        <a href="#about">About</a>
+        <a href="#services">Services</a>
+        <a href="#contact">Contact</a>
     </div>
 
     <div class="content">
