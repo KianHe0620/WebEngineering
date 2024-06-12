@@ -164,17 +164,6 @@ $conn->close();
     var parkingStatusSummaryData = <?php echo json_encode($resultParkingStatusSummary->fetch_all(MYSQLI_ASSOC)); ?>;
     var statusLabels = parkingStatusSummaryData.map(function(item) { return item.Parking_status; });
     var statusCounts = parkingStatusSummaryData.map(function(item) { return item.status_count; });
-    var total = statusCounts.reduce((a, b) => a + b, 0); // Calculate total count
-
-    // Calculate percentages
-    var percentages = statusCounts.map(function(count) {
-        return ((count / total) * 100).toFixed(2) + '%';
-    });
-
-    // Create labels with counts and percentages
-    var statusLabelsFormatted = statusLabels.map(function(label, index) {
-        return label + ' (' + statusCounts[index] + ', ' + percentages[index] + ')';
-    });
 
     // Define colors for the pie chart
     var backgroundColors = statusLabels.map(function(label) {
@@ -189,7 +178,7 @@ $conn->close();
     var parkingStatusSummaryChart = new Chart(parkingStatusSummaryChartCtx, {
         type: 'pie',
         data: {
-            labels: statusLabelsFormatted, // Use formatted labels
+            labels: statusLabels,
             datasets: [{
                 label: 'Parking Status Summary',
                 data: statusCounts,
@@ -203,7 +192,6 @@ $conn->close();
         }
     });
 </script>
-
 
 
 </body>

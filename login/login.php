@@ -1,7 +1,7 @@
 
 <?php
 session_start();
-require '../database/conn_db.php';
+require '../database/conn_db1.php';
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $username = $_POST['username'];

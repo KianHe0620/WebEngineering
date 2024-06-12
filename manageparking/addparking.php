@@ -133,42 +133,53 @@
 </div>
 
 <script>
-    document.getElementById('generateQrBtn').addEventListener('click', function() {
-        var parkingArea = document.getElementById('Parking_area').value;
-        var parkingNumber = document.getElementById('Parking_number').value;
-        var vehicleType = document.getElementById('vehicle_type').value;
-        var parkingDate = document.getElementById('parking_date').value;
-        var parkingStatus = document.getElementById('Parking_status').value; // New line to get parking status
+    // Process data for Parking Status Summary chart
+    var parkingStatusSummaryData = <?php echo json_encode($resultParkingStatusSummary->fetch_all(MYSQLI_ASSOC)); ?>;
+    var statusLabels = parkingStatusSummaryData.map(function(item) { return item.Parking_status; });
+    var statusCounts = parkingStatusSummaryData.map(function(item) { return item.status_count; });
 
-        var parkingInfo = "Parking Area: " + parkingArea + "\n" +
-                          "Parking Number: " + parkingNumber + "\n" +
-                          "Vehicle Type: " + vehicleType + "\n" +
-                          "Date: " + parkingDate + "\n" +
-                          "Status: " + parkingStatus; // Include parking status
-
-        var qrCodeContainer = document.getElementById('qrCodeContainer');
-        qrCodeContainer.innerHTML = ""; // Clear any previous QR code
-
-        var qr = qrcode(0, 'M');
-        qr.addData(parkingInfo);
-        qr.make();
-
-        var imgTag = qr.createImgTag();
-        qrCodeContainer.innerHTML = imgTag;
-        qrCodeContainer.setAttribute("data-parking-info", parkingInfo);
-
-        var qrImage = qr.createDataURL();
-        document.getElementById('qrImage').value = qrImage;
-
-        var viewQRBtn = document.getElementById('viewQRBtn');
-        viewQRBtn.style.display = "block";
+    // Define colors for the pie chart
+    var backgroundColors = statusLabels.map(function(label) {
+        return label === 'available' ? 'rgba(0, 255, 0, 0.2)' : 'rgba(255, 0, 0, 0.2)';
+    });
+    var borderColors = statusLabels.map(function(label) {
+        return label === 'available' ? 'rgba(0, 255, 0, 1)' : 'rgba(255, 0, 0, 1)';
     });
 
-    document.getElementById('viewQRBtn').addEventListener('click', function() {
-        var parkingInfo = document.getElementById('qrCodeContainer').getAttribute("data-parking-info");
-        alert("Parking Information:\n\n" + parkingInfo);
+    // Create Parking Status Summary chart
+    var parkingStatusSummaryChartCtx = document.getElementById('parkingStatusSummaryChart').getContext('2d');
+    var parkingStatusSummaryChart = new Chart(parkingStatusSummaryChartCtx, {
+        type: 'pie',
+        data: {
+            labels: statusLabels,
+            datasets: [{
+                label: 'Parking Status Summary',
+                data: statusCounts,
+                backgroundColor: backgroundColors,
+                borderColor: borderColors,
+                borderWidth: 1
+            }]
+        },
+        options: {
+            responsive: true,
+            plugins: {
+                datalabels: {
+                    formatter: (value, ctx) => {
+                        let sum = 0;
+                        let dataArr = ctx.chart.data.datasets[0].data;
+                        dataArr.map(data => {
+                            sum += data;
+                        });
+                        let percentage = (value * 100 / sum).toFixed(2) + "%";
+                        return percentage;
+                    },
+                    color: '#fff',
+                }
+            }
+        }
     });
 </script>
+
 
 </body>
 </html>
