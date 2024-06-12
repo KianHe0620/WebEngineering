@@ -1,106 +1,114 @@
 body {
-    display: flex;
-    background-color: rgba(248, 248, 255, 0.941);
+  display: flex;
+  background-color: rgba(248, 248, 255, 0.941);
 }
 .sidebar {
-    height: 100vh;
-    width: 200px;
-    position: fixed;
-    top: 70px;
-    left: -200px;
-    background-color: #198d9c;
-    padding-top: 20px;
-    padding-left: 20px;
-    transition: left 0.3s;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
+  height: 100vh;
+  width: 200px;
+  position: fixed;
+  top: 70px;
+  left: -200px;
+  background-color: #198d9c;
+  padding-top: 20px;
+  padding-left: 20px;
+  transition: left 0.3s;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
 }
 .sidebar a {
-    color: white;
-    padding: 10px;
-    text-decoration: none;
-    display: block;
+  color: white;
+  padding: 10px;
+  text-decoration: none;
+  display: block;
 }
 .sidebar a:hover {
-    background-color: #1abc9c;
+  background-color: #1abc9c;
 }
 .sidebar table {
-    color: white;
-    width: 100%;
-    border-collapse: collapse;
+  color: white;
+  width: 100%;
+  border-collapse: collapse;
 }
 
 .sidebar th,
 .sidebar td {
-    padding: 1px; 
-    font-size: 14px; 
+  padding: 1px;
+  font-size: 14px;
 }
 .content {
-    margin-top: 70px;
-    margin-left: 0;
-    padding: 20px;
-    width: 100%;
-    transition: margin-left 0.3s;
+  margin-top: 70px;
+  margin-left: 0;
+  padding: 20px;
+  width: 100%;
+  transition: margin-left 0.3s;
 }
 .topnav {
-    position: fixed;
-    width: 100%;
-    z-index: 2;
-    background-color: #fbd321;
-    display: flex;
-    align-items: center;
-    padding: 10px 20px;
+  position: fixed;
+  width: 100%;
+  z-index: 2;
+  background-color: #fbd321;
+  display: flex;
+  align-items: center;
+  padding: 10px 20px;
 }
 .topnav a {
-    color: black;
-    text-align: center;
-    padding: 14px 16px;
-    text-decoration: none;
+  color: black;
+  text-align: center;
+  padding: 14px 16px;
+  text-decoration: none;
 }
 .topnav a:hover {
-    background-color: #ffcc33; /* Suitable hover background color */
+  background-color: #ffcc33; /* Suitable hover background color */
 }
 .logo {
-    margin-right: 30px;
+  margin-right: 30px;
 }
 .search-bar {
-    margin-right: auto;
-    display: flex;
-    align-items: center;
+  margin-right: auto;
+  display: flex;
+  align-items: center;
 }
 .search-bar input {
-    border-radius: 5px;
-    padding: 5px;
-    border: 1px solid #ccc;
+  border-radius: 5px;
+  padding: 5px;
+  border: 1px solid #ccc;
 }
 
 .topnav button {
-    appearance: none;
-    background-color: inherit;
-    border: none;
-    cursor: pointer;
+  appearance: none;
+  background-color: inherit;
+  border: none;
+  cursor: pointer;
 }
 
 #menuBtn {
-    cursor: pointer;
-    color: black;
-    font-size: 20px;
-    margin-right: 20px;
+  cursor: pointer;
+  color: black;
+  font-size: 20px;
+  margin-right: 20px;
 }
 .sidebar-open .sidebar {
-    left: 0;
+  left: 0;
 }
 .sidebar-open .content {
-    margin-left: 200px;
+  margin-left: 200px;
 }
 
 .sidebar .logout {
-    color: white;
-    padding: 10px;
-    text-decoration: none;
+  color: white;
+  padding: 10px;
+  text-decoration: none;
 }
 .sidebar .logout:hover {
-    background-color: #1abc9c;
+  background-color: #1abc9c;
 }
 
+.table tbody tr:nth-of-type(odd) {
+  background-color: #f9f9f9; /* Light grey */
+}
+
+/* Add hover effect */
+.table tbody tr:hover {
+  background-color: #f1f1f1; /* Slightly darker grey */
+}

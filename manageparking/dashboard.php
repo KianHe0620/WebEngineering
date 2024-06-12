@@ -13,16 +13,29 @@ if ($conn->connect_error) {
     die("Connection failed: " . $conn->connect_error);
 }
 
-
 // Query to get total parking areas
 $sqlTotalParkingAreas = "SELECT COUNT(*) AS total_parking_areas FROM parking";
 
 // Query to get parking status summary
 $sqlParkingStatusSummary = "SELECT Parking_status, COUNT(*) AS status_count FROM parking GROUP BY Parking_status";
 
+// Query to get the count of available parking spaces
+$sqlAvailableParking = "SELECT COUNT(*) AS available_parking FROM parking WHERE Parking_status = 'available'";
+
 // Execute queries
 $resultTotalParkingAreas = $conn->query($sqlTotalParkingAreas);
 $resultParkingStatusSummary = $conn->query($sqlParkingStatusSummary);
+$resultAvailableParking = $conn->query($sqlAvailableParking);
+
+// Initialize available parking count to 0 by default
+$availableParkingCount = 0;
+
+// Fetch the result for available parking if available
+if ($resultAvailableParking) {
+    $rowAvailableParking = $resultAvailableParking->fetch_assoc();
+    $availableParkingCount = $rowAvailableParking['available_parking'];
+}
+
 
 // Close database connection
 $conn->close();
@@ -42,13 +55,7 @@ $conn->close();
     <script src="../node_modules/bootstrap-5.3.3-dist/js/bootstrap.min.js"></script>
     <script defer src="../js/opensidebar.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcode-generator/1.4.4/qrcode.min.js"></script>
-    <style>
-        canvas#totalParkingAreasChart,
-        canvas#parkingStatusSummaryChart {
-            width: 100%;
-            height: 300px; /* Adjust the height as needed */
-        }
-        </style>
+
 </head>
 <body>
 <div class="sidebar">
@@ -115,8 +122,8 @@ $conn->close();
     <a href="#contact">Contact</a>
 </div>
 
-    <h2>Admin Dashboard</h2>
-    <div class="content">
+<h2>Admin Dashboard</h2>
+<div class="content">
     <div class="container-fluid">
         <h1 class="mt-4">Dashboard</h1>
         <p><?php echo date("l, F j, Y"); ?></p>
@@ -140,57 +147,41 @@ $conn->close();
             <div class="col-md-3">
                 <div class="card">
                     <div class="card-body">
-                        <h5 class="card-title">3</h5>
+                        <h5 class="card-title"><?php echo $availableParkingCount; ?></h5>
                         <p class="card-text">Available Parking</p>
                     </div>
                 </div>
             </div>
-        <div class="row">
-            <div class="col-md-12">
-                <h2>Total Parking Areas</h2>
-                <canvas id="totalParkingAreasChart"></canvas>
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-md-12">
-            <h2>Parking Status Summary</h2>
-            <canvas id="parkingStatusSummaryChart"></canvas>
-            </div>
+         </div><br>
+                <h2>Parking Status Summary</h2>
+                <canvas id="parkingStatusSummaryChart" style="max-width:300px"></canvas>
         </div>
     </div>
 </div>
 
-
 <script>
-    // Process data for Total Parking Areas chart
-    var totalParkingAreasData = <?php echo json_encode($resultTotalParkingAreas->fetch_assoc()); ?>;
-
     // Process data for Parking Status Summary chart
     var parkingStatusSummaryData = <?php echo json_encode($resultParkingStatusSummary->fetch_all(MYSQLI_ASSOC)); ?>;
     var statusLabels = parkingStatusSummaryData.map(function(item) { return item.Parking_status; });
     var statusCounts = parkingStatusSummaryData.map(function(item) { return item.status_count; });
+    var total = statusCounts.reduce((a, b) => a + b, 0); // Calculate total count
 
-    // Create Total Parking Areas chart
-    var totalParkingAreasChartCtx = document.getElementById('totalParkingAreasChart').getContext('2d');
-    var totalParkingAreasChart = new Chart(totalParkingAreasChartCtx, {
-        type: 'bar',
-        data: {
-            labels: ['Total Parking Areas'],
-            datasets: [{
-                label: 'Count',
-                data: [parseInt(totalParkingAreasData.total_parking_areas)],
-                backgroundColor: 'rgba(54, 162, 235, 0.2)',
-                borderColor: 'rgba(54, 162, 235, 1)',
-                borderWidth: 1
-            }]
-        },
-        options: {
-            scales: {
-                y: {
-                    beginAtZero: true
-                }
-            }
-        }
+    // Calculate percentages
+    var percentages = statusCounts.map(function(count) {
+        return ((count / total) * 100).toFixed(2) + '%';
+    });
+
+    // Create labels with counts and percentages
+    var statusLabelsFormatted = statusLabels.map(function(label, index) {
+        return label + ' (' + statusCounts[index] + ', ' + percentages[index] + ')';
+    });
+
+    // Define colors for the pie chart
+    var backgroundColors = statusLabels.map(function(label) {
+        return label === 'available' ? 'rgba(0, 255, 0, 0.2)' : 'rgba(255, 0, 0, 0.2)';
+    });
+    var borderColors = statusLabels.map(function(label) {
+        return label === 'available' ? 'rgba(0, 255, 0, 1)' : 'rgba(255, 0, 0, 1)';
     });
 
     // Create Parking Status Summary chart
@@ -198,26 +189,12 @@ $conn->close();
     var parkingStatusSummaryChart = new Chart(parkingStatusSummaryChartCtx, {
         type: 'pie',
         data: {
-            labels: statusLabels,
+            labels: statusLabelsFormatted, // Use formatted labels
             datasets: [{
                 label: 'Parking Status Summary',
                 data: statusCounts,
-                backgroundColor: [
-                    'rgba(255, 99, 132, 0.2)',
-                    'rgba(54, 162, 235, 0.2)',
-                    'rgba(255, 206, 86, 0.2)',
-                    'rgba(75, 192, 192, 0.2)',
-                    'rgba(153, 102, 255, 0.2)',
-                    'rgba(255, 159, 64, 0.2)'
-                ],
-                borderColor: [
-                    'rgba(255, 99, 132, 1)',
-                    'rgba(54, 162, 235, 1)',
-                    'rgba(255, 206, 86, 1)',
-                    'rgba(75, 192, 192, 1)',
-                    'rgba(153, 102, 255, 1)',
-                    'rgba(255, 159, 64, 1)'
-                ],
+                backgroundColor: backgroundColors,
+                borderColor: borderColors,
                 borderWidth: 1
             }]
         },
@@ -226,6 +203,8 @@ $conn->close();
         }
     });
 </script>
+
+
 
 </body>
 </html>

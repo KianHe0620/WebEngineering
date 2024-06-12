@@ -13,10 +13,10 @@ if ($conn->connect_error) {
     die("Connection failed: " . $conn->connect_error);
 }
 
-
 // Define search variables and initialize with default values
 $search_option = '';
 $search_value = '';
+$total_parkings = 0;
 
 if (isset($_GET['search_option'])) {
     $search_option = $_GET['search_option'];
@@ -41,10 +41,12 @@ if (isset($_GET['search_option'])) {
 
     $stmt->execute();
     $result = $stmt->get_result();
+    $total_parkings = $result->num_rows;
 } else {
     // Fetch all parking records
     $sql = "SELECT * FROM parking";
     $result = $conn->query($sql);
+    $total_parkings = $result->num_rows;
 }
 ?>
 
@@ -173,7 +175,8 @@ if (isset($_GET['search_option'])) {
 
 <div class="content">
 <div class="container mt-5">
-    <h2>List of Created Parking Areas</h2><br>
+    <h2>List of All Parkings</h2>
+    <p>Total Created Parking: <?php echo $total_parkings; ?></p><br>
     <div class="search-bar">
         <form action="" method="GET" class="d-flex" onsubmit="handleSearchSubmit(event)">
             <select name="search_option" class="form-select" onchange="updateKeywordOptions()" required>
