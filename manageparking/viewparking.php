@@ -131,7 +131,7 @@ if (isset($_GET['search_option'])) {
             <td><a href="addparking.php">Add Parking</a></td>
         </tr>
         <tr>
-            <td><a href="manage_area.php">Manage Area</a></td>
+            <td><a href="viewparking.php">Manage Parking</a></td>
         </tr>
         <tr>
             <td><a href="dashboard.php">Dashboard</a></td>
@@ -175,8 +175,8 @@ if (isset($_GET['search_option'])) {
 
 <div class="content">
 <div class="container mt-5">
-    <h2>List of All Parkings</h2>
-    <p>Total Created Parking: <?php echo $total_parkings; ?></p><br>
+    <h2>List of Parking</h2>
+    <p>Total Created Parking: <h3><?php echo $total_parkings; ?></h3></p><br>
     <div class="search-bar">
         <form action="" method="GET" class="d-flex" onsubmit="handleSearchSubmit(event)">
             <select name="search_option" class="form-select" onchange="updateKeywordOptions()" required>

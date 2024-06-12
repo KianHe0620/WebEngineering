@@ -36,6 +36,23 @@ if ($resultAvailableParking) {
     $availableParkingCount = $rowAvailableParking['available_parking'];
 }
 
+// Query to get vehicle type summary
+$sqlVehicleTypeSummary = "SELECT Vehicle_type, COUNT(*) AS type_count FROM parking GROUP BY Vehicle_type";
+
+// Execute the query
+$resultVehicleTypeSummary = $conn->query($sqlVehicleTypeSummary);
+
+// Initialize variables for chart data
+$vehicleTypeLabels = [];
+$vehicleTypeCounts = [];
+
+// Fetch the result and store it in arrays
+if ($resultVehicleTypeSummary->num_rows > 0) {
+    while ($row = $resultVehicleTypeSummary->fetch_assoc()) {
+        $vehicleTypeLabels[] = $row['Vehicle_type'];
+        $vehicleTypeCounts[] = $row['type_count'];
+    }
+}
 
 // Close database connection
 $conn->close();
@@ -76,7 +93,7 @@ $conn->close();
             <td><a href="addparking.php">Add Parking</a></td>
         </tr>
         <tr>
-            <td><a href="managearea.php">Manage Area</a></td>
+            <td><a href="managearea.php">Manage Parking</a></td>
         </tr>
         <tr>
             <td><a href="dashboard.php">Dashboard</a></td>
@@ -125,7 +142,7 @@ $conn->close();
 <h2>Admin Dashboard</h2>
 <div class="content">
     <div class="container-fluid">
-        <h1 class="mt-4">Dashboard</h1>
+        <h1 class="mt-4">Admin Dashboard</h1>
         <p><?php echo date("l, F j, Y"); ?></p>
         <div class="row">
             <div class="col-md-3">
@@ -155,6 +172,9 @@ $conn->close();
          </div><br>
                 <h2>Parking Status Summary</h2>
                 <canvas id="parkingStatusSummaryChart" style="max-width:300px"></canvas>
+                <h2>Parking Type Summary</h2>
+        <canvas id="vehicleTypeSummaryChart" style="max-width:300px"></canvas>
+    </div>
         </div>
     </div>
 </div>
@@ -192,7 +212,49 @@ $conn->close();
         }
     });
 </script>
+<script>
+    // Process data for Vehicle Type Summary chart
+    var vehicleTypeLabels = <?php echo json_encode($vehicleTypeLabels); ?>;
+    var vehicleTypeCounts = <?php echo json_encode($vehicleTypeCounts); ?>;
+    
+    // Create colors for the pie chart
+    var backgroundColors = [
+        'rgba(255, 99, 132, 0.2)',
+        'rgba(54, 162, 235, 0.2)',
+        'rgba(255, 206, 86, 0.2)',
+        'rgba(75, 192, 192, 0.2)',
+        'rgba(153, 102, 255, 0.2)',
+        'rgba(255, 159, 64, 0.2)'
+    ];
 
+    var borderColors = [
+        'rgba(255, 99, 132, 1)',
+        'rgba(54, 162, 235, 1)',
+        'rgba(255, 206, 86, 1)',
+        'rgba(75, 192, 192, 1)',
+        'rgba(153, 102, 255, 1)',
+        'rgba(255, 159, 64, 1)'
+    ];
+
+    // Create Vehicle Type Summary chart
+    var vehicleTypeSummaryChartCtx = document.getElementById('vehicleTypeSummaryChart').getContext('2d');
+    var vehicleTypeSummaryChart = new Chart(vehicleTypeSummaryChartCtx, {
+        type: 'pie',
+        data: {
+            labels: vehicleTypeLabels,
+            datasets: [{
+                label: 'Vehicle Type Summary',
+                data: vehicleTypeCounts,
+                backgroundColor: backgroundColors.slice(0, vehicleTypeLabels.length),
+                borderColor: borderColors.slice(0, vehicleTypeLabels.length),
+                borderWidth: 1
+            }]
+        },
+        options: {
+            responsive: true
+        }
+    });
+</script>
 
 </body>
 </html>
