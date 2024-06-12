@@ -28,10 +28,7 @@
                 <th>Parking Area</th>
             </tr>
             <tr>
-                <td><a href="">Content</a></td>
-            </tr>
-            <tr>
-                <td><a href="">Content</a></td>
+                <td><a href="../manageParkingstudent_view_parking.php">View Parking</a></td>
             </tr>
             <tr>
                 <th>Parking Booking</th>
