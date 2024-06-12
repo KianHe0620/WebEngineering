@@ -2,34 +2,52 @@
 
 include_once('../database/conn_db.php');
 
+if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['savetrafficsummon'])) {
+    $TSummon_id = $_POST['TSummon_id'];
+    $UKStaff_id = $_POST['UKStaff_id'];
+    $Student_id = $_POST['Student_id'];
+    $TSummon_date = $_POST['TSummon_date'];
+    $Violation_type = $_POST['Violation_type'];
+    $Enforcement_type = $_POST['Enforcement_type'];
+    $Demerit_point = $_POST['Demerit_point'];
 
-if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['save'])) {
-    // Retrieve and sanitize input data
-    $TSummon_id = $conn->real_escape_string($_POST['TSummon_id']);
-    $UKStaff_id = $conn->real_escape_string($_POST['UKStaff_id']);
-    $Student_id = $conn->real_escape_string($_POST['Student_id']);
-    $TSummon_date = $conn->real_escape_string($_POST['TSummon_date']);
-    $Violation_type = $conn->real_escape_string($_POST['Violation_type']);
-    $Enforcement_type = $conn->real_escape_string($_POST['Enforcement_type']);
-    $Demerit_point = $conn->real_escape_string($_POST['Demerit_point']);
-
-    // Prepare and bind parameters for the SQL UPDATE statement
-    $stmt = $conn->prepare("UPDATE trafficsummon SET UKStaff_id=?, Student_id=?, TSummon_date=?, Violation_type=?, Enforcement_type=?, Demerit_point=? WHERE TSummon_id=?");
-    $stmt->bind_param("ssssssi", $UKStaff_id, $Student_id, $TSummon_date, $Violation_type, $Enforcement_type, $Demerit_point, $TSummon_id);
-
-    // Execute the prepared statement
-    if ($stmt->execute()) {
-        echo "<script>alert('Traffic summon updated successfully');</script>";
-        header('Location: detailTS.php');
+    if (!empty($TSummon_id)) {
+        // Update existing record
+        $sql = "UPDATE trafficsummon 
+                SET UKStaff_id = ?, Student_id = ?, TSummon_date = ?, Violation_type = ?, Enforcement_type = ?, Demerit_point = ? 
+                WHERE TSummon_id = ?";
+                
+        $stmt = $conn->prepare($sql);
+        $stmt->bind_param("sssssss", $UKStaff_id, $Student_id, $TSummon_date, $Violation_type, $Enforcement_type, $Demerit_point, $TSummon_id);
+        
+        if ($stmt->execute()) {
+            // Redirect to viewTS.php after successful update
+            header("Location: viewTS.php");
+            exit();
+        } else {
+            echo "Error: " . $sql . "<br>" . $conn->error;
+        }
     } else {
-        echo "Error: " . $stmt->error;
+        // Insert new record
+        $sql = "INSERT INTO trafficsummon (TSummon_id, UKStaff_id, Student_id, TSummon_date, Violation_type, Enforcement_type, Demerit_point) 
+                VALUES (?, ?, ?, ?, ?, ?, ?)";
+                
+        $stmt = $conn->prepare($sql);
+        $stmt->bind_param("sssssss", $TSummon_id, $UKStaff_id, $Student_id, $TSummon_date, $Violation_type, $Enforcement_type, $Demerit_point);
+        
+        if ($stmt->execute()) {
+            // Redirect to viewTS.php after successful insertion
+            header("Location: viewTS.php");
+            exit();
+        } else {
+            echo "Error: " . $sql . "<br>" . $conn->error;
+        }
     }
-
-    // Close the statement
-    $stmt->close();
 }
 
+$conn->close();
 ?>
+
 
 <!DOCTYPE html>
 <html lang="en">
@@ -164,7 +182,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['save'])) {
                 <label for="Demerit_point" class="form-label">Demerit Points: </label>
                 <input type="text" class="form-control" id="Demerit_point" name="Demerit_point" required>
             </div>
-            <button type="button" class="btn btn-secondary" onclick="window.location.href='manageTrafficSummon.php'">Cancel</button>
+            <button type="button" class="btn btn-secondary" onclick="window.location.href='detailTS.php'">Cancel</button>
             <button type="submit" class="btn btn-success">Update</button>
         </form>
     </div>

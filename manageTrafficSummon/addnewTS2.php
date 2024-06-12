@@ -2,35 +2,43 @@
 
 include_once('../database/conn_db.php');
 
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    // Retrieve and sanitize input data
-    $TSummon_id = $conn->real_escape_string($_POST['TSummon_id']);
-    $UKStaff_id = $conn->real_escape_string($_POST['UKStaff_id']);
-    $Student_id = $conn->real_escape_string($_POST['Student_id']);
-    $TSummon_date = $conn->real_escape_string($_POST['TSummon_date']);
-    $Violation_type = $conn->real_escape_string($_POST['Violation_type']);
-    $Enforcement_type = $conn->real_escape_string($_POST['Enforcement_type']);
-    $Demerit_point = $conn->real_escape_string($_POST['Demerit_point']);
+if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['createtrafficsummon'])) {
+    $TSummon_id = $_POST['TSummon_id'];
+    $UKStaff_id = $_POST['UKStaff_id'];
+    $Student_id = $_POST['Student_id'];
+    $TSummon_date = $_POST['TSummon_date'];
+    $Violation_type = $_POST['Violation_type'];
+    $Enforcement_type = $_POST['Enforcement_type'];
+    $Demerit_point = $_POST['Demerit_point'];
 
+    // Check if a traffic summon already exists for the same student and date
+    $sql_check = "SELECT * FROM trafficsummon WHERE Student_id = ? AND TSummon_date = ?";
+    $stmt_check = $conn->prepare($sql_check);
+    $stmt_check->bind_param("ss", $Student_id, $TSummon_date);
+    $stmt_check->execute();
+    $result_check = $stmt_check->get_result();
 
-    // Prepare and bind parameters for the SQL INSERT statement
-    $stmt = $conn->prepare("INSERT INTO trafficsummon (TSummon_id, UKStaff_id, Student_id, TSummon_date, Violation_type, Enforcement_type, Demerit_point) 
-                            VALUES ('$TSummon_id', '$UKStaff_id', '$Student_id', '$TSummon_date', '$Violation_type', '$Enforcement_type', '$Demerit_point')");
-                            
-    $stmt->bind_param("ssssssi", $TSummon_id, $UKStaff_id, $Student_id, $TSummon_date, $Violation_type, $Enforcement_type, $Demerit_point);
-    // Execute the prepared statement
-    if ($stmt->execute()) {
-        echo "<script>alert('New traffic summon created successfully');</script>";
-        echo "<script>window.location.href='viewTS.php';</script>";
-
+    if ($result_check->num_rows > 0) {
+        echo "Error: A traffic summon already exists for this student on this date.";
     } else {
-        echo "Error: " . $stmt->error;
+        // Insert data into database
+        $sql = "INSERT INTO trafficsummon (TSummon_id, UKStaff_id, Student_id, TSummon_date, Violation_type, Enforcement_type, Demerit_point) 
+                VALUES (?, ?, ?, ?, ?, ?, ?)";
+                
+        $stmt = $conn->prepare($sql);
+        $stmt->bind_param("sssssss", $TSummon_id, $UKStaff_id, $Student_id, $TSummon_date, $Violation_type, $Enforcement_type, $Demerit_point);
+        
+        if ($stmt->execute()) {
+            // Redirect to viewTS.php after successful insertion
+            header("Location: viewTS.php");
+            exit();
+        } else {
+            echo "Error: " . $sql . "<br>" . $conn->error;
+        }
     }
-
-    // Close the statement
-    $stmt->close();
 }
 
+$conn->close();
 ?>
 
 <!DOCTYPE html>
@@ -93,7 +101,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 <td><a href="deleteTS.php">Delete Traffic Summon</a></td>
             </tr>
             <tr>
-                <td><a href="recordTS.php">Record Traffic Summon</a></td>
+                <td><a href="detailTS.php">Record Traffic Summon</a></td>
             </tr>
             <tr>
                 <td><a href="viewTS.php">View Traffic Summon</a></td>
