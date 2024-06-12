@@ -64,21 +64,22 @@ if (isset($_POST['submit'])) {
                 <th>User Profile</th>
             </tr>
             <tr>
-                <td><a href="edit_profile.php">Manage Profile</a></td>
+                <td><a href="manage_profile.php">Manage Profile</a></td>
             </tr>
             <tr>
+                <td><a href="manage_profilee.php">Manage Profilee</a></td>
             </tr>
             <tr>
-                <td>
-                    <!-- Register Vehicles -->
-                    <a href="manage_vehicle.php">Register Vehicle</a>
-                </td>
+                <td><a href="">Content</a></td>
             </tr>
             <tr>
                 <th>Parking Area</th>
             </tr>
             <tr>
-                <td><a href="../manageParkingstudent_view_parking.php">View Parking</a></td>
+                <td><a href="">Content</a></td>
+            </tr>
+            <tr>
+                <td><a href="">Content</a></td>
             </tr>
             <tr>
                 <th>Parking Booking</th>
@@ -120,35 +121,17 @@ if (isset($_POST['submit'])) {
         <a href="#services">Services</a>
         <a href="#contact">Contact</a>
     </div>
+
     <div class="content">
-        <h1>Dashboard</h1>
-        <div class="stats">
-            <div class="stat-card green-gradient">
-            <img src="../image/car.png" height="50px" width="50px">
-                <h3>17</h3>
-                <p>Available Parking Slots</p>
-            </div>
-            <div class="stat-card red-gradient">
-            <img src="../image/car.png" height="50px" width="50px">
-                <h3>3</h3>
-                <p>Occupied Slots</p>
-            </div>
-            <div class="stat-card orange-gradient">
-                <p>Booking</p>
-            </div>
-            <div class="stat-card green-gradient">
-            <img src="../image/motorcycle.png" height="50px" width="50px">
-            <h3>3</h3>
-                <p>Available Parking Slots</p>
-            </div>
-            <div class="stat-card red-gradient">
-            <img src="../image/motorcycle.png" height="50px" width="50px">    
-            <h3>5</h3>
-                <p>Last 7 Days Vehicle Entries</p>
-            </div>
-            <div class="stat-card orange-gradient">
-                <p>View Booking</p>
-            </div>
+        <div class="mainreg">
+            <h1 class="register">MANAGE ROLE:</h1>
+            <form class="sgform">
+                <ul class="register">
+                    <li><button class="unique-button"><a href="register_admin.php">Administrator</a></button></li>
+                    <li><button class="unique-button"><a href="register_student.php">Student</a></button></li>
+                    <li><button class="unique-button"><a href="register_staff.php">Unit Keselamatan Staff</a></button></li>
+                </ul>
+            </form>  
         </div>
     </div>
 </body>

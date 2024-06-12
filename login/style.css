@@ -1,108 +1,55 @@
-/* Basic reset to ensure consistent styling */
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-    font-family: Arial, sans-serif;
-}
-
-/* Styling for the body */
-body {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
-    background-color: #f4f4f9;
-    color: #333;
+#login-container {
+    width: 100%;
+    max-width: 600px; /* Adjust the max-width as needed */
+    margin: 0 auto; /* Center the container */
+    padding: 20px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* Optional: add some shadow for better visibility */
 }
 
 /* Role selection buttons */
-#role {
+#login-container #role {
     margin-bottom: 20px;
     padding: 10px 20px;
     margin: 0 10px;
     font-size: 16px;
-    background-color: #007BFF;
+    background-color: #ffcc33;
     color: #fff;
     border: none;
     border-radius: 22px;
     cursor: pointer;
 }
 
-#role:hover {
-    background-color: #0056b3;
-}
-
-/* Container for the form */
-form {
-    background-color: #fff;
-    padding: 20px 30px;
-    border-radius: 8px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    width: 300px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-}
-#Title1{
-    position: absolute;
-    align-items: center;
-    font-style: italic;
-    margin-left: 30px;
-    margin-top: -680px;
-}
-h1.Title1{
-    font-style: italic;
-    font-size: 2cm;
-    color: #007BFF;
-}
-
-h2.Title1{
-    margin-top: 10px;
-    color: #00000;
-    text-align: center;
-}
-h4.Title1{
-    color: #000000;
-    text-align: center;
+#login-container #role:hover {
+    background-color: #e4b219;
 }
 
 /* Header styling */
-#Title{
-    position: absolute;
-    align-items: center;
-    font-style: italic;
-    margin-left: 30px;
-    margin-top: -680px;
-}
-
-h1.Title{
-    font-style: italic;
-    font-size: 2cm;
-    color: #007BFF;
-}
-
-h2.Title{
-    margin-top: 10px;
-    color: #00000;
+#login-container .Title {
     text-align: center;
+    font-style: italic;
 }
-h4.Title{
+
+#login-container h1.Title {
+    font-size: 2cm;
+    text-align: center;
+    color: #ffcc33;
+}
+
+#login-container h2.Title {
+    margin-top: 10px;
     color: #000000;
     text-align: center;
 }
 
-/* Label styling */
-label {
-    display: block;
-    margin-bottom: 8px;
-    font-weight: bold;
+#login-container h4.Title {
+    color: #000000;
+    text-align: center;
 }
 
 /* Input field styling */
-input[type="text"],
-input[type="email"],
-input[type="password"] {
+#login-container input[type="text"],
+#login-container input[type="email"],
+#login-container input[type="password"] {
     width: 100%;
     padding: 10px;
     margin-bottom: 10px;
@@ -110,11 +57,11 @@ input[type="password"] {
     border-radius: 4px;
 }
 
-/* Button styling */
-button {
+/* Dropdown styling */
+#login-container #Utype {
     width: 100%;
     padding: 10px;
-    background-color: #007BFF;
+    background-color: #ffcc33;
     color: #fff;
     border: none;
     border-radius: 4px;
@@ -122,23 +69,293 @@ button {
     cursor: pointer;
 }
 
+#login-container #Utype:hover {
+    background-color: #e4b219;
+}
+
+/* Button styling */
+#login-container input[type="submit"] {
+    width: 100%;
+    padding: 10px;
+    background-color: #ffcc33;
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+#login-container input[type="submit"]:hover {
+    background-color: #e4b219;
+}
+
 /* Button hover effect */
-button:hover {
+#login-container button:hover {
+    background-color: #e4b219;
+}
+
+/* Heading styling */
+.mainreg h1 {
+    font-size: 24px;
+    margin-bottom: 20px;
+    margin-top: 20px;
+}
+
+/* Form and list styling */
+.sgform {
+    list-style: none;
+    padding: 0;
+}
+
+ul.register {
+    list-style: none;
+}
+
+ul.register li {
+    margin-bottom: 15px;
+}
+
+.unique-button {
+    background-color: #007bff;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.unique-button:hover {
     background-color: #0056b3;
 }
 
-/* Add some margin to the bottom of input fields */
-
-.signup-link {
-    margin-top: 20px;
-    font-size: 0.9em;
-}
-
-.signup-link a {
-    color: #007BFF;
+/* Link styling within the unique button */
+.unique-button a {
     text-decoration: none;
+    color: #ffffff;
+    font-size: 16px;
+    display: block;
 }
 
-.signup-link a:hover {
-    text-decoration: underline;
+.unique-button a:hover {
+    color: #e0e0e0;
+}
+
+.stats {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr); /* 3 columns layout */
+    gap: 20px;
+    justify-items: center; /* Center items horizontally */
+}
+
+.stat-card {
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    transition: transform 0.3s, box-shadow 0.3s;
+    color: white;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 150px;
+    width: 150px;
+}
+
+.stat-card:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+}
+
+.stat-card h3 {
+    margin: 0;
+    font-size: 2em;
+}
+
+.stat-card p {
+    margin: 10px 0 0;
+    font-size: 1em;
+}
+
+.green-gradient {
+    background: linear-gradient(135deg, #a8e063, #56ab2f);
+}
+
+.red-gradient {
+    background: linear-gradient(135deg, #ff758c, #ff7eb3);
+}
+
+
+
+
+
+
+/* vehicleRegister specific styles */
+div.vehicleRegister {
+    font-family: Arial, sans-serif;
+    background-color: #f7f7f7;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+}
+
+div.vehicleRegister .content {
+    background-color: rgba(247, 244, 244, 0.9); /* Semi-transparent background */
+    padding:40px;
+    border-radius: 10px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    width: 400px;
+    max-width: 100%;
+    background-image: url("../image/carRegister.jpg");
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    opacity: 0.9;
+}
+
+div.vehicleRegister h2, div.vehicleRegister h4 {
+    text-align: left;
+    color: #000000;
+    font-weight: bold;
+    text-shadow: 
+        -1px -1px 0 #ffffff,  
+        1px -1px 0 #ffffff,  
+        -1px 1px 0 #ffffff,  
+        1px 1px 0 #ffffff;  
+}
+
+
+div.vehicleRegister h2 {
+    margin-bottom: 20px;
+}
+
+div.vehicleRegister h4 {
+    margin-bottom: 20px;
+}
+
+div.vehicleRegister label {
+    display: block;
+    margin-bottom: 5px;
+    color: #333;
+    font-weight: bold;
+}
+
+div.vehicleRegister input[type="text"],
+div.vehicleRegister input[type="file"] {
+    width: calc(100% - 20px);
+    padding: 10px;
+    margin-bottom: 20px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    box-sizing: border-box;
+}
+
+div.vehicleRegister input[type="submit"] {
+    background-color: #226c22;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    width: 100%;
+}
+
+div.vehicleRegister input[type="submit"]:hover {
+    background-color: #4cae4c;
+}
+
+div.vehicleRegister .form-group {
+    margin-bottom: 15px;
+}
+
+#vehicle-register-form
+{
+    background-color: #5cb85c;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    width: 100%;
+}
+
+
+body.ManageVehicle {
+    background-image: url("../image/carRegister.jpg");
+    background-size: cover;      
+    background-position: center;  
+    background-repeat: no-repeat; 
+    background-attachment: fixed; 
+    margin: 0;
+    padding: 0;
+    height: 100vh;                
+    width: 100%;                 
+}
+
+/* Edit Profile Form Styles */
+.edit-profile {
+    max-width: 400px;
+    margin: 0 auto;
+    padding: 20px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    background-color: #f9f9f9;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.edit-profile img {
+    display: block;
+    margin: 0 auto 20px;
+    border-radius: 50%;
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
+}
+
+.edit-profile h1 {
+    text-align: center;
+    font-size: 24px;
+    margin-bottom: 20px;
+    color: #333;
+}
+
+.edit-profile form {
+    text-align: left;
+}
+
+.edit-profile label {
+    display: block;
+    margin-bottom: 10px;
+    color: #333;
+}
+
+.edit-profile input[type="text"],
+.edit-profile input[type="email"] {
+    width: calc(100% - 22px); /* Adjust for input padding */
+    padding: 10px;
+    margin-bottom: 15px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    box-sizing: border-box;
+}
+
+.edit-profile input[type="text"]:focus,
+.edit-profile input[type="email"]:focus {
+    outline: none;
+    border-color: #007bff;
+}
+
+.edit-profile input[type="submit"] {
+    width: 100%;
+    padding: 10px;
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.edit-profile input[type="submit"]:hover {
+    background-color: #0056b3;
 }

@@ -19,7 +19,7 @@
                 <th>User Profile</th>
             </tr>
             <tr>
-                <td><a href="">Content</a></td>
+                <td><a href="edit_staff.php">Content</a></td>
             </tr>
             <tr>
                 <td><a href="">Content</a></td>

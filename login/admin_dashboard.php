@@ -1,4 +1,50 @@
 <?php
+<<<<<<< HEAD
+session_start();
+
+// Include database connection file
+include_once("../database/conn_db.php");
+
+// Check if the login form is submitted
+if (isset($_POST['submit'])) {
+    // Escape user inputs to prevent SQL injection
+    $email = mysqli_real_escape_string($con, $_POST['email']);
+    $password = mysqli_real_escape_string($con, $_POST['password']);
+    $role = mysqli_real_escape_string($con, $_POST['role']);
+    
+    // Query to select user based on email, password, and role
+    $query = "SELECT * FROM $role WHERE username='$username' AND password='$password'";
+    $result = mysqli_query($con, $query);
+    
+    // Check if a single row is returned, indicating successful login
+    if ($result && mysqli_num_rows($result) == 1) {
+        // Store user information in session variables
+        $_SESSION['email'] = $email;
+        $_SESSION['role'] = $role;
+        
+        // Redirect user to the appropriate dashboard based on role
+        switch ($role) {
+            case 'admin':
+                header("Location: admin_dashboard.php");
+                exit();
+            case 'unit_keselamatan':
+                header("Location: unit_keselamatan_dashboard.php");
+                exit();
+            case 'student':
+                header("Location: student_dashboard.php");
+                exit();
+            default:
+                // Handle other roles or errors
+                break;
+        }
+    } else {
+        // Authentication failed, display error message
+        echo "Invalid email or password.";
+    }
+}
+?>
+
+=======
 
 session_start();
 
@@ -24,28 +70,50 @@ $admin = $stmt->fetch(PDO::FETCH_ASSOC);
 $_SESSION['admin_name'] = $admin['Admin_name'];
 
 ?>
+>>>>>>> 5644ad18460be2edeb0c20204f595ae57aff9396
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Website with Side and Top Navigation</title>
+<<<<<<< HEAD
+    <link rel="stylesheet" href="../node_modules/bootstrap-5.3.3-dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="../css/styles.css">
+    <link rel="stylesheet" href="style.css">
+    <script src="../node_modules/jquery/dist/jquery.slim.min.js"></script>
+    <script src="../node_modules/@popperjs/core/dist/umd/popper.min.js"></script>
+    <script src="../node_modules/bootstrap-5.3.3-dist/js/bootstrap.min.js"></script>
+    <script defer src="../js/opensidebar.js"></script>
+=======
     <link rel="stylesheet" href="./node_modules/bootstrap-5.3.3-dist/css/bootstrap.min.css" >
     <link rel="stylesheet" href="./css/styles.css">
     <script src="./node_modules/jquery/dist/jquery.min.js"></script>
     <script src="./node_modules/@popperjs/core/dist/umd/popper.min.js"></script>
     <script src="./node_modules/bootstrap-5.3.3-dist/js/bootstrap.min.js"></script>
     <script defer src="./js/opensidebar.js"></script> 
+>>>>>>> 5644ad18460be2edeb0c20204f595ae57aff9396
 </head>
 <body>
-
     <div class="sidebar">
         <table>
             <tr>
                 <th>User Profile</th>
             </tr>
             <tr>
-                <td><a href="">Content</a></td>
+                <td>
+                    <!-- Dropdown for Manage Profile -->
+                    <div class="dropdown">
+                        <a class="dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-bs-toggle="dropdown" aria-expanded="false">
+                            Manage Profile
+                        </a>
+                        <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+                            <li><a class="dropdown-item" href="manage_admin_profile.php">Administrator</a></li>
+                            <li><a class="dropdown-item" href="manage_student_profile.php">Student</a></li>
+                            <li><a class="dropdown-item" href="manage_staff_profile.php">Unit Keselamatan Staff</a></li>
+                        </ul>
+                    </div>
+                </td>
             </tr>
             <tr>
                 <td><a href="">Content</a></td>
@@ -63,7 +131,14 @@ $_SESSION['admin_name'] = $admin['Admin_name'];
                 <th>Parking Booking</th>
             </tr>
             <tr>
+<<<<<<< HEAD
+                <td><a href="../manageBooking/booking.php">Booking</a></td>
+            </tr>
+            <tr>
+                <td><a href="../manageBooking/view.php">View Booking</a></td>
+=======
                 <td><a href="./manageBooking/view.php">View Booking</a></td>
+>>>>>>> 5644ad18460be2edeb0c20204f595ae57aff9396
             </tr>
             <tr>
                 <th>Traffic Summon</th>
@@ -75,7 +150,7 @@ $_SESSION['admin_name'] = $admin['Admin_name'];
                 <td><a href="">Content</a></td>
             </tr>
             <tr>
-                <th><a href="">Log Out</a></th>
+                <th><a href="logout.php">Log Out</a></th>
             </tr>
         </table>
     </div>
@@ -83,12 +158,20 @@ $_SESSION['admin_name'] = $admin['Admin_name'];
     <div class="topnav">
         <div id="menuBtn">&#9776;</div>
         <div class="logo">
+<<<<<<< HEAD
+            <img src="../image/umpsa_logo.png" alt="Logo" width="150" height="50">
+=======
             <a href="admin_side.php"><img src="./image/umpsa_logo.png" alt="Logo" width="150" height="50"></a>
+>>>>>>> 5644ad18460be2edeb0c20204f595ae57aff9396
         </div>
         <div class="search-bar">
             <form action="" method="">
                 <input type="text" placeholder="Search.." name="search">
+<<<<<<< HEAD
+                <button type="submit"><img src="../image/search.png" height="20px" width="20px"></button>
+=======
                 <button type="submit"><img src="./image/search.png" height="20px" width="20px"></button>
+>>>>>>> 5644ad18460be2edeb0c20204f595ae57aff9396
             </form>
         </div>
         <a href="#home">Home</a>
