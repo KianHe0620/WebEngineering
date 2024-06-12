@@ -72,7 +72,7 @@ $conn->close();
             <td><a href="managearea.php">Manage Area</a></td>
         </tr>
         <tr>
-            <td><a href="admindashboard.php">Dashboard</a></td>
+            <td><a href="dashboard.php">Dashboard</a></td>
         </tr>
         <tr>
             <th>Parking Booking</th>

@@ -37,10 +37,10 @@
             <td><a href="addparking.php">Add Parking</a></td>
         </tr>
         <tr>
-            <td><a href="managearea.php">Manage Area</a></td>
+            <td><a href="manage_area.php">Manage Area</a></td>
         </tr>
         <tr>
-            <td><a href="admindashboard.php">Dashboard</a></td>
+            <td><a href="dashboard.php">Dashboard</a></td>
         </tr>
         <tr>
             <th>Parking Booking</th>
