@@ -108,6 +108,7 @@ $result = $conn->query($sql);
                     <th>Violation Type</th>
                     <th>Enforcement Type</th>
                     <th>Demerit Points</th>
+                    <th>QR Receipt</th>
                 </tr>
             </thead>
             <tbody>
@@ -122,6 +123,7 @@ $result = $conn->query($sql);
                                 <td>" . $row['Violation_type'] . "</td>
                                 <td>" . $row['Enforcement_type'] . "</td>
                                 <td>" . $row['Demerit_point'] . "</td>
+                                <td>" . $row['qrcode'] . "</td>
                               </tr>";
                     }
                 } else {
@@ -132,6 +134,5 @@ $result = $conn->query($sql);
             </tbody>
         </table>
     </div>
-
 </body>
 </html>

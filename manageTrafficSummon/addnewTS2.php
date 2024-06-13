@@ -176,7 +176,7 @@ $conn->close();
                 <input type="number" class="form-control" id="Demerit_point" name="Demerit_point" required>
             </div>
             <button type="button" class="btn btn-secondary" onclick="window.location.href='viewTS.php'">Cancel</button>
-            <button type="submit" value="Add" name="add" class="btn btn-primary">Add</button>
+            <button type="submit" value="Add" name="add" class="btn btn-primary" onclick="window.location.href='detailTS.php'">Add</button>
         </form>
     </div>
 </body>

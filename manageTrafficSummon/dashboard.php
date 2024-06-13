@@ -72,10 +72,7 @@ $result_enforcements = $conn->query($sql_enforcements);
                 <td><a href="updateTSedit.php">Update Traffic Summon</a></td>
             </tr>
             <tr>
-                <td><a href="deleteTS.php">Delete Traffic Summon</a></td>
-            </tr>
-            <tr>
-                <td><a href="recordTS.php">Record Traffic Summon</a></td>
+                <td><a href="detailTS.php">Record Traffic Summon</a></td>
             </tr>
             <tr>
                 <td><a href="viewTS.php">View Traffic Summon</a></td>
